@@ -1,5 +1,11 @@
 # LinkHD
+
+
 a versatile approach to integrate heterogeneous datasets
+
+
+<img src="https://github.com/favicon.ico" height="24" width="48">
+
 ## Laura Zingaretti & Yuliaxis Ramayo Caldas
 
 #### m.lau.zingaretti@gmail.com
@@ -19,7 +25,7 @@ devtools::install_github(repo="lauzingaretti/LinkHD")
 
 library(linkHD)
 
-To illustrate the LinkHD capabilities we used a public data from TARA Ocean experidition as well as from the ruminal metataxonomic communities (including bactera, archaea and protozoa data). 
+To illustrate the LinkHD capabilities we used a public data from TARA Ocean expedition (https://oceans.taraexpeditions.org/en/m/about-tara/les-expeditions/tara-oceans/) and from the ruminal metataxonomic communities (including bactera, archaea and protozoa data). 
 Both dataset are including in the package.
 
 data(Rumynotipes)
