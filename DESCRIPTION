@@ -1,7 +1,7 @@
 Package: LinkHD
 Type: Package
 Title: LinkHD: a versatile framework to explore and integrate heterogeneous data
-Version: 0.99.3
+Version: 0.99.4
 Author: Laura M Zingaretti
 Authors@R: as.person(c(
     "Laura M Zingaretti <m.lau.zingaretti@gmail.com> [aut, cre]"
