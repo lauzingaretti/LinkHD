@@ -1,0 +1,71 @@
+Package: LinkHD
+Type: Package
+Title: LinkHD: a versatile framework to explore and integrate heterogeneous data
+Version: 0.99.1
+Author: Laura M Zingaretti
+Authors@R: as.person(c(
+    "Laura M Zingaretti <m.lau.zingaretti@gmail.com> [aut, cre]"
+  ))
+Maintainer: Laura M Zingaretti <m.lau.zingaretti@gmail.com>
+Depends:
+    R(>= 3.3),
+     methods,
+    scales,
+    ggplot2,
+    dplyr,
+    cluster,
+    graphics, 
+    ggpubr, 
+    reshape,
+    gridExtra,
+    vegan,
+    data.table,
+    rio,
+    MultiAssayExperiment
+Imports:
+    methods,
+    scales,
+    ggplot2,
+    dplyr,
+    cluster,
+    graphics, 
+    ggpubr, 
+    reshape,
+    gridExtra,
+    vegan,
+    data.table,
+    rio,
+    MultiAssayExperiment
+VignetteBuilder: knitr  
+Suggests:
+    MASS (>= 7.3.0),
+    knitr,
+    rmarkdown,
+    BiocStyle 
+output: 
+        BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{LinkHD:Multiple Heterogeneous (communities) Data Integration }
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+Description: Here we present Link-HD,
+    an approach to integrate heterogeneous datasets, 
+    as a generalization of STATIS-ACT
+    (“Structuration des Tableaux A Trois Indices de la Statistique–Analyse Conjointe de Tableaux”),
+    a family of methods to join and compare information
+    from multiple subspaces. However, STATIS-ACT has some 
+    drawbacks since it only allows continuous data and 
+    it is unable to establish relationships  
+    between samples and features. In order to tackle these 
+    constraints, we incorporate multiple distance options 
+    and a linear regression based Biplot model in order to stablish relationships between 
+    observations and variable and perform variable selection. 
+License: GPL-3
+Encoding: UTF-8
+Collate: 'Read_Data.R' 'DataProcessing.R' 'DistStatis-Class.R' 'LinkData.R' 'CompromisePlot.R' 'VarSelection.R'
+    'GlobalPlot.R' 'CorrelationPlot.R' 'VarSelection-Class.R' 'Auxiliares.R' 'ComputeDistance.R' 'dAB.R' 'OTU2Taxa.R' 
+LazyData: true
+NeedsCompilation: no
+Roxygen: list(wrap=FALSE)
+RoxygenNote: 6.1.1
+
