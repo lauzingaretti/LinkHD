@@ -9,13 +9,13 @@ If you find this resource useful, please cite: LinkHD: a versatile framework to 
 LinkHD is a general R software to integrate heterogeneous dataset focusing on micribial communities. LinkHD combines multivariate techniques to perform data integration with cluster and variable selection.
 The method also allows us to study the relashionships between observations and features and to obtain **enrichment taxa analysis**. 
 
-#Installation:
+## Installation:
 
 Clone the repository or 
 
 devtools::install_github(repo="lauzingaretti/LinkHD")
 
-#Usage
+## Usage
 
 library(linkHD)
 
