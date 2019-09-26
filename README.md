@@ -10,7 +10,8 @@ a versatile approach to integrate heterogeneous datasets
 
 #### m.lau.zingaretti@gmail.com
 
-If you find this resource useful, please cite: LinkHD: a versatile framework to explore and integrate heterogeneous microbial comunnities. submitted. 
+Please cite as:
+Zingaretti1,LM, Renand G, Morgavi DP, Ramayo-Caldas, Y (2019) LinkHD: a versatile framework to explore and integrate heterogeneous microbial comunnities. submitted. 
 
 LinkHD is a general R software to integrate heterogeneous dataset focusing on micribial communities. LinkHD combines multivariate techniques to perform data integration with cluster and variable selection.
 The method also allows us to study the relashionships between observations and features and to obtain **enrichment taxa analysis**. 
@@ -25,11 +26,10 @@ devtools::install_github(repo="lauzingaretti/LinkHD")
 
 library(linkHD)
 
-To illustrate the LinkHD capabilities we used a public data from TARA Ocean expedition (https://oceans.taraexpeditions.org/en/m/about-tara/les-expeditions/tara-oceans/) and from the ruminal metataxonomic communities (including bactera, archaea and protozoa data). 
-Both dataset are including in the package.
+LinkHD capabilities were demostrated analizing public datasets from TARA Ocean expedition (https://oceans.taraexpeditions.org/en/m/about-tara/les-expeditions/tara-oceans/) and datasets from rumen metataxonomic communities (including bactera, archaea and protozoa data). Data can be loaded by the next command: 
 
 data(Rumynotipes)
 
 data(Tataoceans)
 
-Yo can found examples and methods explanation in the following web site: https://lauzingaretti.github.io/LinkHD/
+More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD/
