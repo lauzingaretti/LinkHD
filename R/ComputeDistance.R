@@ -1,3 +1,4 @@
+#' @import vegan
 ComputeDistance<-function(X,Distance,Z=diag(1,nrow=dim(X))){
 
   #distance funtions to use

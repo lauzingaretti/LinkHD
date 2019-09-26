@@ -1,44 +1,34 @@
 Package: LinkHD
 Type: Package
 Title: LinkHD: a versatile framework to explore and integrate heterogeneous data
-Version: 0.99.1
+Version: 0.99.3
 Author: Laura M Zingaretti
 Authors@R: as.person(c(
     "Laura M Zingaretti <m.lau.zingaretti@gmail.com> [aut, cre]"
   ))
 Maintainer: Laura M Zingaretti <m.lau.zingaretti@gmail.com>
+Imports:
+    scales,
+    dplyr,
+    cluster,
+    graphics, 
+    ggpubr, 
+    reshape,
+    gridExtra,
+    vegan,
+    rio,
+    MultiAssayExperiment,
+    stats,
+    lsmeans,
+    reshape2,
+    data.table
 Depends:
     R(>= 3.3),
-     methods,
-    scales,
-    ggplot2,
-    dplyr,
-    cluster,
-    graphics, 
-    ggpubr, 
-    reshape,
-    gridExtra,
-    vegan,
-    data.table,
-    rio,
-    MultiAssayExperiment
-Imports:
     methods,
-    scales,
-    ggplot2,
-    dplyr,
-    cluster,
-    graphics, 
-    ggpubr, 
-    reshape,
-    gridExtra,
-    vegan,
-    data.table,
-    rio,
-    MultiAssayExperiment
+    ggplot2
 VignetteBuilder: knitr  
 Suggests:
-    MASS (>= 7.3.0),
+    MASS (>= 7.3.0),  
     knitr,
     rmarkdown,
     BiocStyle 

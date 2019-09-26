@@ -38,6 +38,8 @@
 #' @name GlobalPlot
 #' @rdname DistStatis-GlobalPlot
 #' @aliases GlobalPlot,DistStatis-method
+#' @import ggplot2
+#' @import gridExtra
 
 setGeneric("GlobalPlot",def=function(x){standardGeneric("GlobalPlot")})
 

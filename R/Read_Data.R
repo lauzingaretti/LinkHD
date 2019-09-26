@@ -14,7 +14,8 @@
 #'
 #' @name Read_Data
 #' @rdname Read_Data
-
+#' @importFrom data.table fread
+#' @importFrom rio convert
 Read_Data<-function(Path=""){
   if(!dir.exists(Path)){
     stop("Path is not valid")
@@ -24,11 +25,11 @@ Read_Data<-function(Path=""){
     f1 = list.files(Path,pattern="xlsx")
     f2 = list.files(Path,pattern="xls")
       if (length(f1)>0){
-        created <- mapply(rio::convert, f1, gsub("xlsx", "csv", f1))
+        created <- mapply(convert, f1, gsub("xlsx", "csv", f1))
         unlink(f1)
       }
     if (length(f2)>0){
-      created <- mapply(rio::convert, f2, gsub("xls", "csv", f2))
+      created <- mapply(convert, f2, gsub("xls", "csv", f2))
       unlink(f2)
     }
      }
@@ -38,7 +39,7 @@ Read_Data<-function(Path=""){
 
   Datos<-list()
   for( i in 1:length(Dat)){
-  Datos[[i]]<-data.frame(data.table::fread(Dat[[i]], header=T), row.names=1,check.names = FALSE)
+  Datos[[i]]<-data.frame(fread(Dat[[i]], header=T), row.names=1,check.names = FALSE)
   }
   names(Datos)<-Dat
   return(Datos)

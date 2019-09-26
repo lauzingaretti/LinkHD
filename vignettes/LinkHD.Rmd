@@ -20,31 +20,6 @@ library('LinkHD')
 })
 ```
 
-# Packages
-```{r,echo=FALSE,results="hide",warning=FALSE}
-if(!require(lsmeans)){
-    install.packages("lsmeans")
-}
-if(!require(topGO)){
-   BiocManager::install("topGO")
-}
-
-if(!require(omicade4)){
-   BiocManager::install("omicade4")
-}
-
-if(!require(FGNet)){
-   BiocManager::install("FGNet")
-}
-if(!require(FGNet)){
-   BiocManager::install("org.Hs.eg.db")
-}
-
-if(!require(FGNet)){
-   install.packages("reshape2")
-}
-```
-
 
 
 ## Introduction 
@@ -287,6 +262,7 @@ names(Dataset)<-c("16_S","Archaea","18_S")
 Link-HD also allows as input MultiAssayExperiment data, a Bioconductor constructor that combines multiple data elements from different experiment.  
 
 ```{r}
+library(MultiAssayExperiment)
 library(LinkHD)
 data("Ruminotypes")
 Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
@@ -670,134 +646,10 @@ OTU2Taxa function can be used to aggregate OTUs into their taxonomic characteris
 ``` 
 
 
-## Alternative omics layers: NCI-60 transcriptome datasets
-
-The following example consists in the illustrative analysis of a subset of NCI-60 cell line panel [@Shankavaram2009,@Reinhold2012], which is widely used in anti-cancer drug screening.  The whole dataset contains 60 human tumour cell lines derived from patients with Leukemia, Melanoma, Lung, Colon, Central Nervous System, Ovarian, Renal, Breast and Prostate cancers. The gene expression of these cell lines was measured using four different microarrays platforms: Agilent mRNA (Whole Human Genome Microarray, $4 \times 44K$) and Affymetrix (HGU 95, HGU 133 and HGU 133plus 2.0). The toy dataset we use here is freely available in the omicade4 package [@BMCMeng]. 
-
-```{r, message=FALSE,warning=FALSE}
-library(omicade4)
-data(NCI60_4arrays)
-#check data dimensions
-lapply(NCI60_4arrays, dim)
-```
-As Link-HD requires common elements in rows, matrices need to be transpose: 
-
-```{r, message=FALSE,warning=FALSE}
-data<-lapply(NCI60_4arrays, function(x){t(x)})
-lapply(data,dim)
-```
-```{r, message=FALSE,warning=FALSE}
-Output<-LinkData(data,Distance=rep("euclidean",3),Scale = TRUE,Center=TRUE,nCluster = 9)
-#variance explained by compromise coordinates
-CompromisePlot(Output)+theme(panel.grid.major = element_blank(),
-panel.grid.minor = element_blank(),
-panel.background = element_blank(),
-axis.line = element_line(colour="black"))
-```
-
-
-Note that Link-HD proportion of explained variance by the two first components (PC1=17.11% and PC=12.73%) is simmilar to the one reported by [@BMCMeng].
-
-
-In order to better undestand the samples structure, we can color them by tumoral tissues: 
-
-```{r, message=FALSE,warning=FALSE}
-cancer_type <- rownames(data$agilent)
-#To select strings before the "."
-cancer_type <- sapply(strsplit(cancer_type, split="\\."),function(x){x[1]})
-
-```
-
-```{r,message=FALSE,warning=FALSE}
-mydata=Output@Compromise.Coords
-#set colors
-cols <- c("#ffcc00","#ff0066","#00cc99","#0000ff","#ffff00","#ffb3b3","#1affa3","#660033","#26004d")
-mydata$fit.cluster<-as.factor(mydata$fit.cluster)
-p<-ggplot(mydata, aes(Dim.1,Dim.2)) +
-geom_point(aes(colour = cancer_type))
-p + scale_colour_manual(values = cols) + theme_classic() 
-```
-Meanwhile, the next figure represents the color according to the Link-HD clusters assignation:
-
-```{r,message=FALSE,warning=FALSE}
-mydata=Output@Compromise.Coords
-#set colors
-cols <- c("#ffcc00","#ff0066","#00cc99","#0000ff","#ffff00","#ffb3b3","#1affa3","#660033","#26004d")
-mydata=Output@Compromise.Coords
-mydata$fit.cluster<-as.factor(mydata$fit.cluster)
-p<-ggplot(mydata, aes(Dim.1,Dim.2)) +
-geom_point(aes(colour = fit.cluster))
-p + scale_colour_manual(values = cols) + theme_classic() 
-```
-Link-HD can obtaining clusters from the integrated datasets. We have implemented our method picking out nine (the number of tissues in NCI-60 dataset) and three clusters, respectively. In the first case, Link-HD recovers the structure of melanoma, CNS and Renal tissues. For the three clusters structure, the first axis  divides the tissues into two groups with leukemia, colon and two breast cancer tissues (yellow in the plot below) and the rest of carcinoma lines (pink). Finally, the second axis splits these carcinoma and leukemia cell-lines from melanoma.  The structure of the first axis (which explains the greatest variation (17,11%),Dim.1) is associated with the separation of epithelial and mesenchymal mechanisms, which in turn it is related with the cancer prognosis [@BMCMeng].
-
-
-```{r,message=FALSE,warning=FALSE}
-Output<-LinkData(data,Distance=rep("euclidean",3),Scale = TRUE,Center=TRUE,nCluster = 3)
-mydata=Output@Compromise.Coords
-#set colors
-cols <- c("#ffcc00","#ff0066","#00cc99")
-mydata=Output@Compromise.Coords
-mydata$fit.cluster<-as.factor(mydata$fit.cluster)
-p<-ggplot(mydata, aes(Dim.1,Dim.2)) +
-geom_point(aes(colour = fit.cluster))
-p + scale_colour_manual(values = cols) + theme_classic() 
-```
-
-The RV plot shows that agilent data has a different profile in respect with the other 3 microarrays platforms (all the RV correlations between agilent and the other 3 datasets are less than 0.8). 
-
-```{r,message=FALSE,warning=FALSE}
-CorrelationPlot(Output)
-```
-
-
-We also apply Select_Var function in order to select the most important variables, responsible of the obtained structure.
-
-
- 
-```{r,message=FALSE,warning=FALSE}
-Select_Var<-VarSelection(Output,Data=data,Crit = "Rsquare",perc=0.9)
-```
-
-```{r,message=FALSE,warning=FALSE}
-Select_Var@Variables
-```
-
- We compared  The list of selected genes against the cancer related markers reported by [@BMCMeng].  37.61% (41/109) of the  Link-HD selected genes were also reported in [@BMCMeng]. Between them, we remark 20 melanoma-related  markers (MAGEA3, S100A1, S100B, GPNMB, CSPG4,POU3F2,C10orf90,VGF,SERPINF1,GAPDHS,ACP5,CA14,ST8SIA1,FABP7,C6orf218,GPR137B,EDNRB,LYST,SOX10,TRPV2) and five leukemia markers (GMFG, FGD3, VAV1, ATP1A3, RHOH).
- 
-Finally, to gain insight into the  overrepresented biological processes, we carry out a classical set enrichment analyses, Gene Ontology (GO) approach by using the Functional Gene Networks (FGNet) Bioconductor package [@Aibar]. 
-
-
-
-```{r,message=FALSE,warning=FALSE}
-library(FGNet)
-library("org.Hs.eg.db")
-List<-union(union(union(toupper(colnames(data[[1]])),toupper(colnames(data[[2]]))),toupper(colnames(data[[3]]))),toupper(colnames(data[[4]])))
-##hay 22756 genes distintos
-
-geneLabels<-List
-feaResults_topGO <- fea_topGO(Select_Var@Variables,genesUniverse = List ,geneIdType="SYMBOL", organism="Hs") 
-feaResults <- feaResults_topGO
-incidMat <- fea2incidMat(feaResults)
-functionalNetwork(incidMat, plotTitleSub="Selected Genes Relationships",legendText = FALSE)
-```
-
-The Gene Enrichment Analysis  returns a list with the top Gene Ontology (GO) terms. Between the top 5 of enriched biological processes, we can highlight: Angiogenesis
-Regulation, which is essential for tumor development and metastasis,  Epithelial cell
-proliferation and Regulation of epithelial cell proliferation, that are involve in
-colonorectal neoplasms. 
-External tools for Gene Enrichment Analysis are also available. For instance,the results from IPA (Ingenuity Pathway Analysis) reveals several cancer - related pathways, such as the
-Regulation of the Epithelial-Mesenchymal Transition (EMT), which is crucial in the
-metastasis development. Moreover, biological functions related with Carcinomas and
-digestive cancer (Organismal Injury and Abnormalities
-Carcinoma,Gastrointestinal Disease, Organismal Injury and Abnormalities Digestive system
-cancer) were also identified. 
-
-
 ## Final Remarks
 
-In summary, we have developed Link-HD, an R package to integrate heterogeneous variable datasets. It combines some well-known multivariate techniques to perform data integration with cluster, variable selection and network analysis. We show the utility of Link-HD to integrate heterogeneous datasets. Applied to data from the TARA Ocean expedition, Link-HD reproduces the relevance of members of Proteobacteria phyla and temperature on the functionality and stratification of this ecosystem. Regarding the rumen microbiota, the consensus space inferred by Link-HD  shows the association of the structure of the rumen microbiome with $CH_4$ emission. The method also facilitates the study of the relationships between observations and features for performing variable selection. In this sense, a good performance of Link-HD with other available integrative methodologies, such as mixKernel was demonstrated. Finally, as is illustrated in the last example, our approach can also be used to integrate and explore others kind of ‘omics’ data.
-A more detaileduser guide is available in: https://lauzingaretti.github.io/LinkHD/
+In summary, we have developed Link-HD, an R package to integrate heterogeneous datasets. It combines some well-known multivariate techniques to perform data integration with cluster, variable selection and network analysis. We show the utility of Link-HD to integrate heterogeneous datasets. Applied to data from the TARA Ocean expedition, Link-HD reproduces the relevance of members of Proteobacteria phyla and temperature on the functionality and stratification of this ecosystem. Regarding the rumen microbiota, the consensus space inferred by Link-HD  shows the association of the structure of the rumen microbiome with $CH_4$ emission. The method also facilitates the study of the relationships between observations and features for performing variable selection. In this sense, a good performance of Link-HD with other available integrative methodologies, such as mixKernel was demonstrated. 
+A more detailed user guide is available in: https://lauzingaretti.github.io/LinkHD/
 
 ## Appendix
 

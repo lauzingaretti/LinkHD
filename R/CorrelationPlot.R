@@ -34,7 +34,8 @@
 #' @name CorrelationPlot
 #' @rdname DistStatis-CorrelationPlot
 #' @aliases CorrelationPlot,DistStatis-method
-
+#' @import ggplot2
+#'
 setGeneric("CorrelationPlot",def=function(x,...){standardGeneric("CorrelationPlot")})
 
 

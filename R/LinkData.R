@@ -58,6 +58,8 @@
 #'
 #' @name LinkData
 #' @rdname LinkData-LinkData
+#' @import MultiAssayExperiment
+#' @importFrom cluster pam
 
 
 LinkData <-function (Data, Distance = c(), Center = FALSE, Scale = FALSE,
@@ -315,7 +317,7 @@ if(nCluster>0){
 
 #k-means over compromise matrix
 if(cl_method=="pam"){
-fit <- cluster::pam(ProjObs[,1:2], nCluster)
+fit <- pam(ProjObs[,1:2], nCluster)
 Means_clusters=aggregate(ProjObs,by=list(fit$clustering),FUN=mean)
 # append cluster assignment
 ProjObs <- data.frame(ProjObs, fit$cluster)

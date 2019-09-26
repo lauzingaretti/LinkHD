@@ -1,7 +1,7 @@
 #File Created by Laura M. Zingaretti
 #Adapted from previous kimod package function
 #Date April, 24 2019
-
+#' @importFrom stats lm
 #geometric mean
 g_mean <- function(Data) {
   if (any(na.omit(Data == 0))){

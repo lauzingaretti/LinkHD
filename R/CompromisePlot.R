@@ -40,7 +40,8 @@
 #' @name CompromisePlot
 #' @rdname DistStatis-CompromisePlot
 #' @aliases CompromisePlot,DistStatis-method
-
+#' @import ggplot2
+#'
 setGeneric("CompromisePlot",def=function(x,x_lab=NULL, y_lab=NULL,
           Name=NULL, pchPoints=2,colObs=NULL,...){standardGeneric("CompromisePlot")})
 
