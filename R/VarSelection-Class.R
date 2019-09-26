@@ -9,7 +9,6 @@
 #'   }
 #'
 #'
-#'
 #' @section Fields:
 #' \itemize{
 #'\item  Variables return all the selected variables (and the frecuency of selection).
