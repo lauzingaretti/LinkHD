@@ -49,11 +49,11 @@
 dAB<-function(x,Data, adjust.methods="BH",threshold=0.05){
 
    #adjust.method <- match.arg(adjust.methods)
-   if (class(Data)=="MultiAssayExperiment"){
+   if (is(Data, "MultiAssayExperiment")){
      Data<-Data@ExperimentList@listData
    }
 
-   if(class(x)!="DistStatis"){
+   if(!is(x, "DistStatis")){
     stop("x must be a DistStatis class object")
    }
    ##Obtain x name for future update
@@ -71,7 +71,7 @@ dAB<-function(x,Data, adjust.methods="BH",threshold=0.05){
     stop("threshold value refer to the significance level and should be higher than 0 and smaller than 1, usually 0.05")
   }
 
-  if(class(Data)!="list"){
+  if(!is(Data,"list")){
     stop("Data should be a list with at least one element. List data.frame should be communities data")
   }
   WWW<-x@Compromise.Coords

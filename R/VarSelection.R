@@ -58,7 +58,7 @@
 #'@name VarSelection
 #'@rdname VarSelection
 #'@export
-
+#'@import methods
 #x is an object comes from DistStatis class, intercept idicates if the model would be runned with/without intercept
 #crit is the model selection criteria used to variable selection Rsquare/ p-value
 #perc proportion of observations to select
@@ -69,10 +69,10 @@ VarSelection<-function(x,Data, intercept=FALSE, model="LM",
                      Crit="Rsquare",perc=0.90,nDims=2,Normalize=FALSE){
               ##Obtain x name for future update
               nameObject<-deparse(substitute(x))
-              if(class(x)!="DistStatis"){
+              if(!is(x,"DistStatis")){
                 stop("x should be an object from DistStatis-class")
               }
-              if (class(Data)=="MultiAssayExperiment"){
+              if (is(Data, "MultiassayExperiment")){
                 Data<-Data@ExperimentList@listData
               }
 
@@ -114,7 +114,13 @@ VarSelection<-function(x,Data, intercept=FALSE, model="LM",
 
 
               Mat<-as.matrix(ProjObs)
+              if(is(Data,"MultiAssayExperiment")){
+              Datos<-Data@ExperimentList@listData
+              }else{
               Datos<-Data
+              }
+
+
 
               if(all(apply((x <- sapply(Datos, rownames)), 2, function(y)+ identical(y, rownames(Datos[[1]]))))==FALSE){
                 stop("tables should be the same observations")

@@ -1,7 +1,8 @@
 #File Created by Laura M. Zingaretti
 #Adapted from previous kimod package function
 #Date April, 24 2019
-#' @importFrom stats lm
+#' @import stats
+
 #geometric mean
 g_mean <- function(Data) {
   if (any(na.omit(Data == 0))){
@@ -15,7 +16,7 @@ g_mean <- function(Data) {
 #Center_LR (Centered Log Ratio)
 centerLR<-function (Data, b = exp(1))
 {
-  if (!is.data.frame(Data) & !is.matrix(Data)){
+  if (!is(Data,"data.frame") & !is(Data,"matrix")){
     stop("The dataset should be a matrix or data.frame")
   }
   #just if data.frame or matrix has only one column
@@ -35,12 +36,12 @@ centerLR<-function (Data, b = exp(1))
 #Normalize data (scale/center, both or one)
 
 Normalize <-function(X,scale=TRUE,center=TRUE){
-  if(class(X)!="list"){
+  if(!is(X,"list")){
     stop("Error:Object of type 'list' expected")
   }
 
   f2 <- function(v){
-    if(class(v)!="numeric"){
+    if(!is.numeric(v)){
       stop("Error:Object of type 'numeric' expected")
     }
     row.w <- rep(1, length(v))/length(v)
@@ -82,7 +83,7 @@ Normalize <-function(X,scale=TRUE,center=TRUE){
 #calculate Scalar product between configurations
 ScalarProduct <-
   function(X,Row=TRUE){
-    if(class(X)!="matrix")
+    if(!is.matrix(X))
     {
       X <- as.matrix(X)
     }
@@ -103,7 +104,7 @@ ScalarProduct <-
 #Then Data should be positives.
 cia<-function(df){
   df <- as.data.frame(df)
-  if (!is.data.frame(df))
+  if (!is(df,"data.frame"))
     stop("data.frame expected")
   if (any(df < 0))
     stop("negative entries in table and your data should be frecuencies")
@@ -161,7 +162,7 @@ dist.binary <-
       stop("df is not a data.frame or a matrix")
     df <- as.mat
     compbin<-function(X=NULL){
-      if(class(X)!="data.frame" && class(X)!="matrix"){
+      if(!is(X,"data.frame") && !is(X,"matrix")){
         stop("invalid class of Object")
       }
       X<-na.omit(X)
@@ -279,7 +280,7 @@ dist.binary <-
 
 #function to compute mahalanobis distance
 maha <-function(df=NULL){
-  if(class(df)!="data.frame" && class(df)!="matrix"){
+  if(!is(df,"data.frame") && !is(df,"matrix")){
     stop("invalid class of Object")
   }
   df <- data.frame(df)
@@ -311,7 +312,7 @@ maha <-function(df=NULL){
 
 
 compbin<-function(X=NULL){
-  if(class(X)!="data.frame" && class(X)!="matrix"){
+  if(!is(X,"data.frame") && !is(X,"matrix")){
     stop("invalid class of Object")
   }
   X<-na.omit(X)

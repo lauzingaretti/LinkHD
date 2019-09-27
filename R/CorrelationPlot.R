@@ -35,21 +35,24 @@
 #' @rdname DistStatis-CorrelationPlot
 #' @aliases CorrelationPlot,DistStatis-method
 #' @import ggplot2
-#'
+#' @import ggpubr
+#' @importFrom reshape2 melt
+#' @import emmeans
+
 setGeneric("CorrelationPlot",def=function(x,...){standardGeneric("CorrelationPlot")})
 
 
 
 setMethod(f="CorrelationPlot", signature="DistStatis", definition=function(x,...){
   ##Check that is at element is available
-  if( class(x)!="DistStatis"){
+  if(!is(x,"DistStatis")){
     stop("CorrelationPlot requires a DistStatis object")
   }
 
 diag(x@RV)<-1
 #A<-get_upper_tri(x@RV)
 m<-x@RV
-melted_cormat <- reshape::melt(m,preserve.na=FALSE)
+melted_cormat <- melt(m,preserve.na=FALSE)
 colnames(melted_cormat)<-c("x","y","RV")
 
 m<-melted_cormat

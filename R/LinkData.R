@@ -58,8 +58,11 @@
 #'
 #' @name LinkData
 #' @rdname LinkData-LinkData
-#' @import MultiAssayExperiment
+#' @import methods
+#' @importFrom methods as is
+#' @import scales
 #' @importFrom cluster pam
+#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 
 
 LinkData <-function (Data, Distance = c(), Center = FALSE, Scale = FALSE,
@@ -69,11 +72,11 @@ LinkData <-function (Data, Distance = c(), Center = FALSE, Scale = FALSE,
   ## Function for implementation the Statis Method  with Distance options.
   ##The Data must be a list of data.frames or ExpressionSet
   ##check if elements of list are ESet data.
-if(class(Data)!="list" & class(Data)!="MultiAssayExperiment"){
+if(!is(Data,"list") & !is(Data, "MultiAssayExperiment")){
   stop("your dataset should be stored in a list containing data.frame or ExpressionSet object or a MultiAssayExperiment object ")
 }
 
-if(class(Data)=="list"){
+if(is(Data,"list")){
   if(unique(lapply(Data,class))=="ExpressionSet"){
     Data<-lapply(Data,function(x){as(x,"data.frame")})
     Data<-lapply(Data,function(x){t(x)})
@@ -81,8 +84,7 @@ if(class(Data)=="list"){
   }
 }
 
-if(class(Data)=="MultiAssayExperiment"){
-  #Data2<-Data
+if(is(Data, "MultiAssayExperiment")){
   Data<-Data@ExperimentList@listData
 }
 
@@ -162,9 +164,7 @@ for (i in 1: length(Data)){
 # This list name (S) follows Abdi (2007)
 S=list()
 
-# if(class(Distance)!="NULL" && class(Distance)!="character"){
-#  stop("Invalid class object Distance")
-#}
+
 
 if (length(Distance)!=length(Data)){
 S<-lapply(X,ScalarProduct)

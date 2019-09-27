@@ -39,7 +39,7 @@
 #' @rdname DistStatis-GlobalPlot
 #' @aliases GlobalPlot,DistStatis-method
 #' @import ggplot2
-#' @import gridExtra
+#' @importFrom gridExtra grid.arrange
 
 setGeneric("GlobalPlot",def=function(x){standardGeneric("GlobalPlot")})
 
@@ -47,7 +47,7 @@ setGeneric("GlobalPlot",def=function(x){standardGeneric("GlobalPlot")})
 
 setMethod(f="GlobalPlot", signature="DistStatis", definition=function(x){
   ##Check that is at element is available
-  if(class(x)!="DistStatis"){
+  if(!is(x,"DistStatis")){
     stop("GlobalPlot requires a DistStatis object")
   }
 p<-list()
@@ -64,9 +64,9 @@ p[[i]]<-ggplot2::ggplot(x@TableProjections[[i]][,c(1:2)],
           axis.text.y = element_text(angle=45,hjust=1))
   }
 if (length(p)==2){
-  gridExtra::grid.arrange(grobs=p, ncol = round(length(p)/2), nrow = length(p),newpage =TRUE)
+  grid.arrange(grobs=p, ncol = round(length(p)/2), nrow = length(p),newpage =TRUE)
 }else{
-gridExtra::grid.arrange(grobs=p, ncol = round(length(p)/2), nrow = round(length(p)/2),newpage =TRUE)
+grid.arrange(grobs=p, ncol = round(length(p)/2), nrow = round(length(p)/2),newpage =TRUE)
 
 }
 

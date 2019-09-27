@@ -41,6 +41,7 @@
 #' @rdname DistStatis-CompromisePlot
 #' @aliases CompromisePlot,DistStatis-method
 #' @import ggplot2
+#' @import graphics
 #'
 setGeneric("CompromisePlot",def=function(x,x_lab=NULL, y_lab=NULL,
           Name=NULL, pchPoints=2,colObs=NULL,...){standardGeneric("CompromisePlot")})
@@ -50,7 +51,7 @@ setGeneric("CompromisePlot",def=function(x,x_lab=NULL, y_lab=NULL,
 setMethod(f="CompromisePlot", signature="DistStatis", definition=function(x,x_lab=NULL, y_lab=NULL,
          Name=NULL, pchPoints=2,colObs=NULL,...){
   ##Check that is at element is available
-  if( class(x)!="DistStatis"){
+  if( !is(x,"DistStatis")){
     stop("CompromisePlot requires a DistStatis object")
   }
 

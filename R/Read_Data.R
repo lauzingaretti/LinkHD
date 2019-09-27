@@ -16,6 +16,7 @@
 #' @rdname Read_Data
 #' @importFrom data.table fread
 #' @importFrom rio convert
+#'
 Read_Data<-function(Path=""){
   if(!dir.exists(Path)){
     stop("Path is not valid")
@@ -33,13 +34,13 @@ Read_Data<-function(Path=""){
       unlink(f2)
     }
      }
-    Dat<-setdiff(list.files(Path,full.names=T),list.dirs(Path,recursive=F))
+    Dat<-setdiff(list.files(Path,full.names=TRUE),list.dirs(Path,recursive=FALSE))
 
     }
 
   Datos<-list()
   for( i in 1:length(Dat)){
-  Datos[[i]]<-data.frame(fread(Dat[[i]], header=T), row.names=1,check.names = FALSE)
+  Datos[[i]]<-data.frame(fread(Dat[[i]], header=TRUE), row.names=1,check.names = FALSE)
   }
   names(Datos)<-Dat
   return(Datos)

@@ -25,7 +25,6 @@
 #'}
 #' @examples
 #' {
-#'library(LinkHD)
 #'data("Ruminotypes")
 #'Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
 #'Dataset<-Normalization
@@ -34,18 +33,21 @@
 #'Output<-LinkData(Dataset,Distance=rep("euclidean",3),Scale = FALSE,Center=FALSE,nCluster = 3)
 #'Select_Var<-VarSelection(Output,Data=Dataset,Crit = "Rsquare",perc=0.9)
 #'SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_16S,tableName="16_S",AnalysisLev = "Family")
-#'melted_Table <- data.table::melt(SignTaxa$TotalUp1)
+#'Selected<-SignTaxa$TotalUp1
 #' }
 #'
 #' @name OTU2Taxa
 #' @rdname OTU2Taxa-OTU2Taxa
+#' @import stats
+#' @importFrom reshape2 melt
+
 
 
 
 
 OTU2Taxa<-function(Selection,TaxonInfo,tableName,AnalysisLev="Genus"){
 
-if(class(Selection)!="data.frame" && class(Selection)!="list"){
+if(!is.data.frame(Selection) && !is.list(Selection)){
   stop("Selection should be a list or data.frame")
 }
 
@@ -56,7 +58,7 @@ if(("Genus"%in%AnalysisLev || "Family"%in%AnalysisLev)==FALSE){
   stop("You should choose an unit to data aggregation.")
 }
 
-if(class(Selection)=="data.frame"){
+if(is(Selection,"data.frame")){
 if(tableName%in%Selection==FALSE){
   stop("wrong table name specification. Please, make sure that you are using a right table name")
 }
@@ -65,7 +67,7 @@ if(tableName%in%Selection==FALSE){
   ntable<-ncol(SelectedVar)
   SelectedVar<-names(SelectedVar)
 }
-  if(class(Selection)=="list"){
+  if(is(Selection,"list")){
   if(tableName%in%names(Selection)==FALSE){
     stop("wrong table name specification. Please, make sure that you are using a right table name")
   }
@@ -88,7 +90,7 @@ TotalSelected<-table(TaxonInfo[TaxonInfo[,1]%in%SelectedVar,][,colnames(TaxonInf
 TotalSelected=0
 }
 }
-if(class(TotalSelected)=="table"){
+if(is(TotalSelected,"table")){
 #hypergeometric test
 Test<-c()
 for(i in 1:length(TotalSelected)){
@@ -114,7 +116,7 @@ return(list("TotalHyp"=Test,"TotalUp1"=Test2))
 
   OTU2Taxa<-function(Data,Selection,TaxonInfo,tableName,AnalysisLev="Genus"){
 
-    if(class(Selection)!="data.frame" && class(Selection)!="list"){
+    if(!is(Selection,"data.frame") && !is(Selection,"list")){
       stop("Selection should be a list or data.frame")
     }
 
@@ -125,7 +127,7 @@ return(list("TotalHyp"=Test,"TotalUp1"=Test2))
       stop("You should choose an unit to data aggregation.")
     }
 
-    if(class(Selection)=="data.frame"){
+    if(is.data.frame(Selection)){
       if(tableName%in%Selection==FALSE){
         stop("wrong table name specification. Please, make sure that you are using a right table name")
       }
@@ -134,7 +136,7 @@ return(list("TotalHyp"=Test,"TotalUp1"=Test2))
       ntable<-ncol(SelectedVar)
       SelectedVar<-names(SelectedVar)
     }
-    if(class(Selection)=="list"){
+    if(is.list(Selection)){
       if(tableName%in%names(Selection)==FALSE){
         stop("wrong table name specification. Please, make sure that you are using a right table name")
       }
@@ -157,7 +159,7 @@ return(list("TotalHyp"=Test,"TotalUp1"=Test2))
         TotalSelected=0
       }
     }
-    if(class(TotalSelected)=="table"){
+    if(is(TotalSelected,"table")){
       #hypergeometric test
       Test<-c()
       for(i in 1:length(TotalSelected)){
