@@ -1,37 +1,33 @@
 Package: LinkHD
 Type: Package
 Title: LinkHD: a versatile framework to explore and integrate heterogeneous data
-Version: 0.99.4
-Author: Laura M Zingaretti
-Authors@R: as.person(c(
-    "Laura M Zingaretti <m.lau.zingaretti@gmail.com> [aut, cre]"
-  ))
-Maintainer: Laura M Zingaretti <m.lau.zingaretti@gmail.com>
+Version: 0.99.5
+Author:  Laura M. Zingaretti [aut, cre]
+Maintainer: "Laura M Zingaretti" <m.lau.zingaretti@gmail.com>
 Imports:
     scales,
-    dplyr,
     cluster,
     graphics, 
     ggpubr, 
-    reshape,
     gridExtra,
     vegan,
     rio,
     MultiAssayExperiment,
-    stats,
-    lsmeans,
+    emmeans,
     reshape2,
     data.table
 Depends:
-    R(>= 3.3),
+    R(>= 3.6.0),
     methods,
-    ggplot2
+    ggplot2,
+    stats
 VignetteBuilder: knitr  
 Suggests:
     MASS (>= 7.3.0),  
     knitr,
     rmarkdown,
     BiocStyle 
+biocViews: Classification,MultipleComparison,Regression,Software
 output: 
         BiocStyle::html_document
 vignette: >
@@ -58,4 +54,3 @@ LazyData: true
 NeedsCompilation: no
 Roxygen: list(wrap=FALSE)
 RoxygenNote: 6.1.1
-
