@@ -27,7 +27,6 @@ filtered data  by  counts higher than one. In both cases, we implemented -log(p+
 }
 \examples{
 {
-library(LinkHD)
 data("Ruminotypes")
 Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
 Dataset<-Normalization
@@ -36,7 +35,7 @@ names(Dataset)<-c("16_S","Archaea","18_S")
 Output<-LinkData(Dataset,Distance=rep("euclidean",3),Scale = FALSE,Center=FALSE,nCluster = 3)
 Select_Var<-VarSelection(Output,Data=Dataset,Crit = "Rsquare",perc=0.9)
 SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_16S,tableName="16_S",AnalysisLev = "Family")
-melted_Table <- data.table::melt(SignTaxa$TotalUp1)
+Selected<-SignTaxa$TotalUp1
 }
 
 }
