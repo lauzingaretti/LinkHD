@@ -335,7 +335,7 @@ p + scale_colour_manual(values = cols) + theme_classic()
 The obtained clusters of samples can be used to evaluate their association with external variables (i.e., host phenotype information).  Previous studies  [@kittelmann,@danielsson2017,@Caldas] reported  a link between the structure of the rumen microbiome and $CH_4$ emission.  Therefore, in our study, we contrast the $CH_4y$ emission levels between the three clusters of samples. In agreement with the afore mentioned studies, cluster assignation was significantly associated with $CH_4$ emission.  Significant differences between two out of three groups were found, cows clustered within C1 and C2 having lower and higher $CH_4$ emission.
 
 ```{r, message=FALSE}
-library(lsmeans)
+library( emmeans)
 Dat<-data.frame("y"=Ruminotypes$phenotype$ch4y,"E"=as.factor(mydata$fit.cluster))
 s=lm(y~E,data=Dat)
 #summary(s)
@@ -658,11 +658,10 @@ List of LinkHD dependencies:
     methods,
     scales,
     ggplot2,
-    dplyr,
     cluster,
     graphics, 
     ggpubr, 
-    reshape,
+    reshape2,
     gridExtra,
     vegan,
     data.table,
