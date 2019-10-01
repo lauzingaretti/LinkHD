@@ -4,7 +4,7 @@
 a versatile approach to integrate heterogeneous datasets
 
 
-<img src="https://github.com/lauzingaretti/LinkHD/blob/web-ld/linkhd.png" height="100" width="200">
+<img src="https://github.com/lauzingaretti/LinkHD/blob/web-ld/linkhd.png" height="150" width="300">
 
 ## Laura Zingaretti & Yuliaxis Ramayo Caldas
 
