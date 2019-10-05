@@ -9,7 +9,8 @@ OTU2Taxa(Selection, TaxonInfo, tableName, AnalysisLev = "Genus")
 \arguments{
 \item{Selection}{list or data frame from VarSelection or dAB function}
 
-\item{TaxonInfo}{data.frame with taxonomic table associated to Data input. For instance, if Data comes from 16_S level, TaxoInfo should be a data.frame with 16_S associated taxonomic information}
+\item{TaxonInfo}{data.frame with taxonomic table associated to Data input. For instance, if Data comes from 16_S level, TaxoInfo should be a data.frame with 16_S associated taxonomic information.
+Note that the first column of this table must have the OTUs ids.}
 
 \item{tableName}{a character indicating the table name. For instance, if your data comes from 16_S, this parameter should be "16_S".
 Note that, this argument must mutch with the names from the input list into LinkData function.}
