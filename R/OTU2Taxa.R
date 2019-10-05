@@ -54,6 +54,7 @@ if(!is.data.frame(Selection) && !is.list(Selection)){
 if(length(tableName)>1){
   stop("Please, you must to indicate only one table name")
 }
+
 if(("Genus"%in%AnalysisLev || "Family"%in%AnalysisLev)==FALSE){
   stop("You should choose an unit to data aggregation.")
 }
@@ -71,9 +72,17 @@ if(tableName%in%Selection==FALSE){
   if(tableName%in%names(Selection)==FALSE){
     stop("wrong table name specification. Please, make sure that you are using a right table name")
   }
-  SelectedVar<-names(Selection[[which(names(Selection)%in%tableName)]])
-  ntable<-length(SelectedVar)
-}
+  #changed names
+    #changed names
+    if(is(Selection[[which(names(Selection)%in%tableName)]],"character")){
+      SelectedVar<-Selection[[which(names(Selection)%in%tableName)]]
+      ntable<-length(SelectedVar)
+    }
+    if(is(Selection[[which(names(Selection)%in%tableName)]],"numeric")){
+      SelectedVar<-names(Selection[[which(names(Selection)%in%tableName)]])
+      ntable<-length(SelectedVar)
+    }
+    }
 
 TaxonInfo<-as.data.frame(TaxonInfo)
 if(AnalysisLev%in%colnames(TaxonInfo)==FALSE){
@@ -112,82 +121,7 @@ Test<-(-log(Test+0.05))
 Test2<-(-log(Test2+0.05))
 return(list("TotalHyp"=Test,"TotalUp1"=Test2))
 }else{
-
-
-  OTU2Taxa<-function(Data,Selection,TaxonInfo,tableName,AnalysisLev="Genus"){
-
-    if(!is(Selection,"data.frame") && !is(Selection,"list")){
-      stop("Selection should be a list or data.frame")
-    }
-
-    if(length(tableName)>1){
-      stop("Please, you must to indicate only one table name")
-    }
-    if(("Genus"%in%AnalysisLev || "Family"%in%AnalysisLev)==FALSE){
-      stop("You should choose an unit to data aggregation.")
-    }
-
-    if(is.data.frame(Selection)){
-      if(tableName%in%Selection==FALSE){
-        stop("wrong table name specification. Please, make sure that you are using a right table name")
-      }
-      SelectedVar<-Selection[Selection%in%tableName]
-      #number of variables from the table
-      ntable<-ncol(SelectedVar)
-      SelectedVar<-names(SelectedVar)
-    }
-    if(is.list(Selection)){
-      if(tableName%in%names(Selection)==FALSE){
-        stop("wrong table name specification. Please, make sure that you are using a right table name")
-      }
-      SelectedVar<-names(Selection[[which(names(Selection)%in%tableName)]])
-      ntable<-length(SelectedVar)
-    }
-
-    TaxonInfo<-as.data.frame(TaxonInfo)
-    if(AnalysisLev%in%colnames(TaxonInfo)==FALSE){
-      stop("Your table should contains genus or family level")
-    }
-
-    TotaltoGenLev<-table(TaxonInfo[colnames(TaxonInfo)==AnalysisLev])
-    if(!any(suppressWarnings(is.na(as.numeric(SelectedVar))))){
-      TotalSelected<-table(TaxonInfo[TaxonInfo[,1]%in%as.numeric(SelectedVar),][,colnames(TaxonInfo)==AnalysisLev])
-    }else{
-      if(any(TaxonInfo[,1]%in%SelectedVar)){
-        TotalSelected<-table(TaxonInfo[TaxonInfo[,1]%in%SelectedVar,][,colnames(TaxonInfo)==AnalysisLev])
-      }else{
-        TotalSelected=0
-      }
-    }
-    if(is(TotalSelected,"table")){
-      #hypergeometric test
-      Test<-c()
-      for(i in 1:length(TotalSelected)){
-        x=TotalSelected[i]
-        m=TotaltoGenLev[names(TotaltoGenLev)%in%names(TotalSelected)[i]]
-        n=sum(TotaltoGenLev[-which(names(TotaltoGenLev)%in%names(TotalSelected)[i])])
-        k=sum(TotalSelected)
-        Test<-c(Test,1-phyper(x, m = m, n = n, k = k))
-      }
-
-      Test<-sort(Test,decreasing=TRUE)
-      #look for some empty genera or family
-      if(length(which(nchar(trimws(names(Test)))==0))>0){
-        names(Test)[which(nchar(trimws(names(Test)))==0)]<-paste0("unknown_",seq(1:length(which(nchar(trimws(names(Test)))==0))),AnalysisLev)
-      }
-
-      Test2<-Test[names(Test)%in%names(TotalSelected[which(TotalSelected>1)])]
-      Test<-(-log(Test+0.05))
-      Test2<-(-log(Test2+0.05))
-      return(list("TotalHyp"=Test,"TotalUp1"=Test2))
-    }else{
-
-      return(list("TotalHyp"=c("selected variables are not annotated,please check"),"TotalUp1"=c("selected variables are not annotated, please check!")))
+return(list("TotalHyp"=c("selected variables are not annotated,please check"),"TotalUp1"=c("selected variables are not annotated, please check!")))
     }
 
   }
-
-return(list("TotalHyp"=c("selected variables are not annotated,please check"),"TotalUp1"=c("selected variables are not annotated, please check!")))
-}
-
-}
