@@ -195,10 +195,10 @@ VarSelection<-function(x,Data, intercept=FALSE, model="LM",
               .Object@Variables<-variables
               .Object@Coordinates<-all_dat[c(3:4),indices]
               .Object@VarTable<-all_dat[5,indices]
-              if(is(Crit,"Rsquare")){
+              if(Crit=="Rsquare"){
               .Object@values<-all_dat[1,indices]
               }
-              if(is(Crit,"p-val")){
+              if(Crit=="p-val"){
                .Object@values<-all_dat[2,indices]
               }
                validObject(.Object)
