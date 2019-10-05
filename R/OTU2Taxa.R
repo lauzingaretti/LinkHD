@@ -54,6 +54,7 @@ if(!is.data.frame(Selection) && !is.list(Selection)){
 if(length(tableName)>1){
   stop("Please, you must to indicate only one table name")
 }
+
 if(("Genus"%in%AnalysisLev || "Family"%in%AnalysisLev)==FALSE){
   stop("You should choose an unit to data aggregation.")
 }
@@ -72,9 +73,16 @@ if(tableName%in%Selection==FALSE){
     stop("wrong table name specification. Please, make sure that you are using a right table name")
   }
   #changed names
-  SelectedVar<-Selection[[which(names(Selection)%in%tableName)]]
-  ntable<-length(SelectedVar)
-}
+    #changed names
+    if(is(Selection[[which(names(Selection)%in%tableName)]],"character")){
+      SelectedVar<-Selection[[which(names(Selection)%in%tableName)]]
+      ntable<-length(SelectedVar)
+    }
+    if(is(Selection[[which(names(Selection)%in%tableName)]],"numeric")){
+      SelectedVar<-names(Selection[[which(names(Selection)%in%tableName)]])
+      ntable<-length(SelectedVar)
+    }
+    }
 
 TaxonInfo<-as.data.frame(TaxonInfo)
 if(AnalysisLev%in%colnames(TaxonInfo)==FALSE){
