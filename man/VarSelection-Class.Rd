@@ -22,6 +22,7 @@ VarSelection is a class to perform variable selection from a DistStatis object.
 \item  Variables return all the selected variables (and the frecuency of selection).
 \item  Coordinates represent the coordenates (Betas coeeficients on LM) of the selected variables.
 \item  VarTable data.frame indicating which table selected variables come from.
+\item  values data.frame contains the R2 or pvalue (fdr) of selected variables (it depends of the Crit used).
 }
 }
 
@@ -31,6 +32,7 @@ VarSelection is a class to perform variable selection from a DistStatis object.
 \item  Variables return all the selected variables (and the frecuency of selection).
 \item  Coordinates represent the coordenates (Betas coeeficients on LM) of the selected variables.
 \item  VarTable dataframe indicating the table that each selected variable comes from.
+\item  values data.frame which contains the R2 or pvalue (fdr) of selected variables (it depends of the Crit used).
 }
 }
 
