@@ -14,7 +14,7 @@ bibliography: cites.bib
 
 
 # Version Info
-```{r, echo=FALSE, results="hide", warning=FALSE}
+```{r, echo=FALSE, results="hide", warning=FALSE,tidy=TRUE}
 suppressPackageStartupMessages({
 library('LinkHD')
 })
@@ -130,7 +130,7 @@ Link-HD also implements a differential abundance analysis which is computed usin
 You need devtools to install LinkHD
 
 
-```{r,results=' hide',eval=FALSE}
+```{r,results=' hide',eval=FALSE,tidy=TRUE}
 #if you don't have devtools, please install it:
 install.packages("devtools")
 #if devtools is already installed, ommit previous step
@@ -141,7 +141,7 @@ library(LinkHD)
 Congrats! The software is ready to use! You can check how to use it using this manual as well as the help of each function, for instance:
 
 
-```{r,results=' hide',eval=FALSE}
+```{r,results=' hide',eval=FALSE,tidy=TRUE}
  ?? LinKData()
 ```
 
@@ -163,18 +163,20 @@ To illustrate the usefulness of Link-HD, we used public data from the TARA Ocean
 ## Results
 
 Applied to TARA Ocean, we have integrated environmental,  structural  and funcional information from prokaryotic communities. In concordance with the original publication and results obtained with mixKernel [@mixkernel]. **Link-HD** reproduces the relevant role of temperature of the Proteobacteria phyla  on the structure of this ecosystem. The next lines show how to perform Tara Ocean integration:
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 library(LinkHD)
 ```
 
 
-```{r}
+```{r,tidy=TRUE}
 data("Taraoceans")
 data(Taraoceans)
 pro.phylo <- Taraoceans$taxonomy[ ,"Phylum"]
-TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),as.data.frame(Taraoceans$pro.NOGs))
+TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),
+             as.data.frame(Taraoceans$pro.NOGs))
 TaraOc_1<-scale(TaraOc[[1]])
-Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),function(x){DataProcessing(x,Method="Compositional")})
+Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),
+                      function(x){DataProcessing(x,Method="Compositional")})
 colnames(Normalization[[1]])=pro.phylo
 colnames(Normalization[[2]])=Taraoceans$GO
 TaraOc<-list(TaraOc_1,Normalization[[1]],Normalization[[2]])
@@ -186,13 +188,13 @@ Tara_Out<-LinkData(TaraOc,Scale =FALSE,Center=FALSE,Distance = c("ScalarProduct"
 
 The compromise plot from Tara Oceans can be obtained by the next function:
 
-```{r}
+```{r,tidy=TRUE}
 CompromisePlot(Tara_Out)+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                                panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
 
 The correlation plot between tables for the Tara Oceans data can be easily obtained by: 
-```{r}
+```{r,tidy=TRUE}
 CorrelationPlot(Tara_Out) +
  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(),
@@ -203,16 +205,14 @@ CorrelationPlot(Tara_Out) +
 As expected, the correlation between pro_NOGs and pro_phylo is higher than with phychemestry variables. 
 
 We select variables using Biplot methodology 
-```{r}
+```{r,tidy=TRUE}
 Selection<-VarSelection(Tara_Out,TaraOc,Crit="Rsquare",perc=0.95)
 ```
 
 The following plot only gives the frequency of selected variables from all the tables.
-```{r}
+```{r,tidy=TRUE}
 library(reshape2)
-
-
-Ds<-as.data.frame(table(Selection@Variables))
+Ds<-as.data.frame(table(Variables(Selection)))
 ggplot(Ds, aes(x=Var1, y = Freq)) +
   geom_bar(stat="identity", fill="steelblue") +
   ggpubr::rotate_x_text(45)
@@ -224,7 +224,7 @@ You can find  additional analysis and examples about Tara Ocean in the package m
 
 ## Ruminotypes analysis
 
-```{r,results='hide',eval=FALSE}
+```{r,results='hide',eval=FALSE,tidy=TRUE}
 library(LinkHD)
 data("Ruminotypes")
 ```
@@ -237,14 +237,14 @@ In the second example, which is developed in this vignette, metataxonomic data o
 
 
 
-```{r results='hide', message=FALSE, warning=FALSE} 
+```{r results='hide', message=FALSE, warning=FALSE,tidy=TRUE} 
 library("LinkHD")
 library("ggplot2")
 options(width =50)
 ```
 
 
-```{r} 
+```{r,tidy=TRUE} 
 data("Ruminotypes")
 ```
 
@@ -253,19 +253,21 @@ data("Ruminotypes")
 
 The _DataProcessing_ function of **Link-HD**, can be implemented in two differents ways. We recommend  use of the 'Standard' option if your data is continuous and normally distributed. The 'Compositional' option is recommended for microbiome data, due to their compositional nature. Applied to a compositional-like dataset this option implements a centered log-ratios transformation [@aitchison1982]. Finally, if any external function have been used or the dataset is  already normalized the user can skip this step and directly run the LinkData function (see below).
 
-```{r}
-Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
+```{r,tidy=TRUE}
+Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`)
+                      ,function(x){DataProcessing(x,Method="Compositional")})
 Dataset<-Normalization
 names(Dataset)<-c("16_S","Archaea","18_S")
 ```
 
 Link-HD also allows as input MultiAssayExperiment data, a Bioconductor constructor that combines multiple data elements from different experiment.  
 
-```{r}
+```{r,tidy=TRUE}
 library(MultiAssayExperiment)
 library(LinkHD)
 data("Ruminotypes")
-Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
+Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),
+                      function(x){DataProcessing(x,Method="Compositional")})
 Dataset<-Normalization
 names(Dataset)<-c("16_S","Archaea","18_S")
 Dataset<-MultiAssayExperiment(experiments = Dataset)
@@ -278,7 +280,7 @@ _LinkData_ is the main function of Link-HD, which performs the integration step 
 
 Here, we run the main function of LinkHD, i.e., LinkData, which returns the compromise structure. Since we have applied the clr transformation in the previous step, setting "Euclidean" as distance method is equivalent to computing the Atchison distance for compositional data. The Scale and Center arguments are only useful when your dataset was not previously normalized and they are not useful in a communities analysis context. Finally, the nCluster argument is used to obtain a group structure from the compromise configuration. 
 
-```{r}
+```{r,tidy=TRUE}
 Output<-LinkData(Dataset,Distance=rep("euclidean",3),Scale = FALSE,Center=FALSE,nCluster = 3)
 #variance explained by compromise coordinates
 CompromisePlot(Output)+theme(panel.grid.major = element_blank(),
@@ -291,7 +293,7 @@ The color indicates the quality of representation of each individual in the two 
 
 Optionally, data could be a list of S4 ExpressionSet objects. The advantage of ExpressionSet is their capability to describe samples and features in the experiment, as well as information related to the whole experiment and data-processing. To use ExpressionSet class, please follow the next lines:
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,tidy=TRUE}
 B<-ExpressionSet()
 Dataset1<-Normalization
 A<-lapply(Dataset1,as.matrix)
@@ -303,7 +305,7 @@ Output_<-LinkData(B,Distance=rep("euclidean",3),Scale = FALSE,Center=FALSE,nClus
 
 The sample distribution within each input dataset (equivalent to coordinates principal analysis) can be explored using the Globalplot option. This plot is the projection of each individual table into the compromise space. 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 GlobalPlot(Output)
 ```
 
@@ -311,7 +313,7 @@ GlobalPlot(Output)
 
 We use the Generalized Multivariate Correlation Coefficient RV to estimate the relationship between each microbial community. The results in the next figure suggests a strong relationship between the prokaryotic communities of Archaea and Bacteria (16_S).
 
-```{r}
+```{r,tidy=TRUE}
 CorrelationPlot(Output)
 ```
 
@@ -321,8 +323,8 @@ CorrelationPlot(Output)
 In agreement with the original publication that found a ruminotype-like structure for rumen bacteria  [@Caldas], Link-HD recovers a Ruminotypes-like cluster structure (including archaea, bateria and protozoa) of the rumen ecosystem (next figure). Note that our function is flexible and  the algorithm can be run for different configurations or set  numbers of cluster. Although, we have not implemented an algorithm to obtain the optimum number of groups, it could be easily done using extant R functions, like e.g., the Silhouette coefficient  [@rousseeuw1987].
 
 
-```{r}
-mydata=Output@Compromise.Coords
+```{r,tidy=TRUE}
+mydata=compromise_coords(Output)
 #set colors
 cols <- c("1" = "red", "2" = "blue", "3" = "orange")
 mydata$fit.cluster<-as.factor(mydata$fit.cluster)
@@ -334,7 +336,7 @@ p + scale_colour_manual(values = cols) + theme_classic()
 
 The obtained clusters of samples can be used to evaluate their association with external variables (i.e., host phenotype information).  Previous studies  [@kittelmann,@danielsson2017,@Caldas] reported  a link between the structure of the rumen microbiome and $CH_4$ emission.  Therefore, in our study, we contrast the $CH_4y$ emission levels between the three clusters of samples. In agreement with the afore mentioned studies, cluster assignation was significantly associated with $CH_4$ emission.  Significant differences between two out of three groups were found, cows clustered within C1 and C2 having lower and higher $CH_4$ emission.
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 library( emmeans)
 Dat<-data.frame("y"=Ruminotypes$phenotype$ch4y,"E"=as.factor(mydata$fit.cluster))
 s=lm(y~E,data=Dat)
@@ -348,12 +350,12 @@ pairs(lsmeans(s, "E"))
 Two alternative methods for variable selection are implemented. The first one is based on regression biplot. From a general point of view, a regression biplot can be understood as the decomposition of a target matrix. Therefore, it could be interpreted as a projection of each variable (i.e., OTUs) onto the compromise structure. To accomplish that goal, we used an external linear model to obtain the regressors coefficients (by projecting all OTUs on the n first compromise axis). Finally, we measure the representation quality using the proportion of explained variance by each regression ($R^2$) to select a proportion (user defined) of variables with a higher R-squared. The second approach is based on differential abundance analysis, which is computed through a non-parametric Kruskall Wallis test. In both scenarios the comparison is made using the clr-transformed data with the goal of identifying feautures related with the compromise configuration. Finally, false discovery rate (FDR) is applied to select only variables with an FDR < 0.05 (this level can also be defined by the user). 
 The biplot procedure can be implemented using the  Select_Var function as folow. The Crit argument refers to the criteria used to select the variables and the perc is to establish the percentage of variables to be selected. Intercept is set to F
 
-```{r, message=FALSE}  
+```{r, message=FALSE,tidy=TRUE}  
 Select_Var<-VarSelection(Output,Data=Dataset,Crit = "Rsquare",perc=0.9)
 ```
 
 Meanwhile, the differential abundance procedure is implemented in the dAB function:
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 M<-dAB(Output,Data=Dataset)
 ```
 
@@ -365,23 +367,24 @@ To facilitate the biological interpretation of the results (after variable selec
 
 The next lines split selected variables from Biplot methodology by each table, i.e., which selected variables come from of Archaea, Bacteria and protozoa. 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 #Select only the selected variables form Select_Var object
-SelectedB_16S<-Select_Var@Variables[Select_Var@VarTable=="16_S"]
-SelectedB_Archaea<-Select_Var@Variables[Select_Var@VarTable=="Archaea"]
-SelectedB_18S<-Select_Var@Variables[Select_Var@VarTable=="18_S"]
+SelectedB_16S<-Variables(Select_Var)[VarTable(Select_Var)=="16_S"]
+SelectedB_Archaea<-Variables(Select_Var)[VarTable(Select_Var)=="Archaea"]
+SelectedB_18S<-Variables(Select_Var)[VarTable(Select_Var)=="18_S"]
 ```
 The same as before, but for selected variables from the dAB function: 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 Selec_16S<-as.matrix(Ruminotypes[[1]][,colnames(Dataset[[1]])%in%names(M[[1]])])
 Selec_Archaea<-as.matrix(Ruminotypes[[2]][,colnames(Dataset[[2]])%in%names(M[[2]])])
 Selec_18S<-as.matrix(Ruminotypes[[3]][,colnames(Dataset[[3]])%in%names(M[[3]])])
 ```
 The next figure represents the bacterial profile of the most important variables according to the Biplot procedure aggregated at family level.
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 library(reshape2)
-SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_16S,tableName="16_S",AnalysisLev = "Family")
+SignTaxa<-OTU2Taxa(Selection=VarTable(Select_Var),TaxonInfo=Ruminotypes$Taxa_16S,
+                   tableName="16_S",AnalysisLev = "Family")
 melted_Table <- melt(SignTaxa$TotalUp1)
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
   scale_fill_gradient(low = "steelblue",
@@ -395,7 +398,7 @@ ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=val
 
 The following figure shows the Bacteria family taxonomy of most important variables  according to the  differential abundance analysis.
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 SignTaxa<-OTU2Taxa(Selection=M,TaxonInfo=Ruminotypes$Taxa_16S,tableName="16_S",AnalysisLev = "Family")
 melted_Table <- melt(SignTaxa$TotalUp1)
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
@@ -410,13 +413,13 @@ ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=val
 
 After aggregating the selected variables we can also explore their relative abundance patterns (i.e., most relevant genera/family) and distribution between clusters. For instance, in our example, it is reasonable to expect the highest differences between samples classified as C1 and C3. The next examples are focused on members of  Ruminococcaceae, Christensenellaceae and Succinivibrionaceae family, but the user can extend it to other family or taxonomic levels:
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 Rumin<-which(Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,]$Family=="Ruminococcaceae")
 OTUs<-Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,][Rumin,]$OTUID
 Rumin_Tot<-Dataset[['16_S']][,colnames(Dataset[['16_S']])%in%OTUs]
 RuminSum<-apply(Rumin_Tot,1,sum)
 
-Total<-data.frame(RuminSum,"Group"=as.factor(Output@Compromise.Coords$fit.cluster))
+Total<-data.frame(RuminSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 p <- ggplot(Total, aes(x=Group, y=RuminSum, fill=Group)) +
   geom_boxplot()+
   scale_fill_manual(values=c("Tomato", "Orange", "DodgerBlue"))+
@@ -426,12 +429,12 @@ p
 ```
 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 Christ<-which(Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,]$Family==rownames(melted_Table)[14])
 OTUs<-Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,][Christ,]$OTUID
 Christ_Tot<-Dataset[['16_S']][,colnames(Dataset[['16_S']])%in%OTUs]
 ChristSum<-apply(Christ_Tot,1,sum)
-Total<-data.frame(ChristSum,"Group"=as.factor(Output@Compromise.Coords$fit.cluster))
+Total<-data.frame(ChristSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 p <- ggplot(Total, aes(x=Group, y=ChristSum, fill=Group)) +
   geom_boxplot()+
   scale_fill_manual(values=c("Tomato", "Orange", "DodgerBlue"))+
@@ -441,7 +444,7 @@ p
 
 The following example represents an alternative view to the previous plot:
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 ggplot(Total, aes(x=Group, y=rownames(Total), fill=ChristSum)) +
   geom_tile() + scale_fill_gradient(low = "steelblue",
                                     high = "#FF0066",na.value="steelblue") +
@@ -454,13 +457,13 @@ ggplot(Total, aes(x=Group, y=rownames(Total), fill=ChristSum)) +
 
 As illustrated in the previous figure,  samples from the cluster 2 have a higher frequency of OTUs members of the family Christensenellaceae.  
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 Succi<-which(Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,]$Family=="Succinivibrionaceae")
 OTUs<-Ruminotypes$Taxa_16S[Ruminotypes$Taxa_16S$OTUID%in%SelectedB_16S,][Succi,]$OTUID
 Succi_Tot<-Dataset[['16_S']][,colnames(Dataset[['16_S']])%in%OTUs]
 SucciSum<-apply(Succi_Tot,1,sum)
 
-Total<-data.frame(SucciSum,"Group"=as.factor(Output@Compromise.Coords$fit.cluster))
+Total<-data.frame(SucciSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 Total<-Total[- which(Total[,1]>1),]
 p <- ggplot(Total, aes(x=Group, y=SucciSum, fill=Group)) +
   geom_boxplot()+
@@ -477,8 +480,9 @@ Focusing on the protozoa dataset, the next figure represents the most important 
 
 
 
-```{r, message=FALSE}
-SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_18S,tableName="18_S")
+```{r, message=FALSE,tidy=TRUE}
+SignTaxa<-OTU2Taxa(Selection=VarTable(Select_Var),
+                   TaxonInfo=Ruminotypes$Taxa_18S,tableName="18_S")
 melted_Table <- melt(SignTaxa$TotalUp1)
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
   scale_fill_gradient(low = "steelblue",
@@ -495,7 +499,7 @@ ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=val
 Meanwhile, as suggested by the differential abundance the most relevant genera at 18S rRNA gene level were:
 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 SignTaxa<-OTU2Taxa(Selection=M,TaxonInfo=Ruminotypes$Taxa_18S,tableName="18_S")
 melted_Table <- melt(SignTaxa$TotalUp1[SignTaxa$TotalUp1>1])
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
@@ -510,13 +514,13 @@ scale_fill_gradient(low = "steelblue",
 
 In the next boxplot we represent the cluster distribution of the Diplodinim genus relative abundance. 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 Dip<-which(Ruminotypes$Taxa_18S[Ruminotypes$Taxa_18S$OTUID%in%SelectedB_18S,]$Genus=="Diplodinium")
 OTUs<-Ruminotypes$Taxa_18S[Ruminotypes$Taxa_18S$OTUID%in%SelectedB_18S,][Dip,]$OTUID
 Dip_Tot<-Dataset[['18_S']][,colnames(Dataset[['18_S']])%in%OTUs]
 DipSum<-apply(Dip_Tot,1,sum)
 
-Total<-data.frame(DipSum,"Group"=as.factor(Output@Compromise.Coords$fit.cluster))
+Total<-data.frame(DipSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 
 
 p <- ggplot(Total, aes(x=Group, y=DipSum, fill=Group)) +
@@ -530,7 +534,7 @@ p
 An alternative visualization of the previous result: 
 
 
-```{r, message=FALSE}
+```{r, message=FALSE,tidy=TRUE}
 ggplot(Total, aes(x=Group, y=rownames(Total), fill=DipSum)) +
   geom_tile() + scale_fill_gradient(low = "steelblue",
                                     high = "#FF0066",na.value="steelblue") +
@@ -545,9 +549,9 @@ We noted similar pattern to the one observed at 16S rRNA gene level. In both app
 Finally, at the Archaea level we also obtained a high degree of agreenment between the two ways implemented for variable selection. 
 
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,tidy=TRUE}
 
-SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_Archaea,tableName="Archaea")
+SignTaxa<-OTU2Taxa(Selection=VarTable(Select_Var),TaxonInfo=Ruminotypes$Taxa_Archaea,tableName="Archaea")
 melted_Table <- melt(SignTaxa$TotalUp1)
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
   scale_fill_gradient(low = "steelblue",
@@ -562,7 +566,7 @@ ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=val
 
 
 
-```{r, message=FALSE,warning=FALSE}
+```{r, message=FALSE,warning=FALSE,tidy=TRUE}
 SignTaxa<-OTU2Taxa(Selection=M,TaxonInfo=Ruminotypes$Taxa_Archaea,tableName="Archaea")
 melted_Table <- melt(SignTaxa$TotalUp1)
 ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=value)) +
@@ -578,13 +582,13 @@ ggplot(data =melted_Table, aes(x= reorder(rownames(melted_Table), -value), y=val
 
 Differences in the relative abundance of _Methanobrevibacter_ between the  clusters of samples are represented in the next figure. As expected, lower relative abundance of Methanobrevibacter was observed in the cluster of the lower emitting samples.   
 
-```{r, message=FALSE,warning=FALSE}
+```{r, message=FALSE,warning=FALSE,tidy=TRUE}
 
 Met<-which(Ruminotypes$Taxa_Archaea[Ruminotypes$Taxa_Archaea$OTU%in%SelectedB_Archaea,]$Genus==levels(Ruminotypes$Taxa_Archaea$Genus)[4])
 OTUs<-Ruminotypes$Taxa_Archaea[Ruminotypes$Taxa_Archaea$OTU%in%SelectedB_Archaea,][Met,]$OTU
 Met_Tot<-Dataset[['Archaea']][,colnames(Dataset[['Archaea']])%in%OTUs]
 MetSum<-apply(Met_Tot,1,sum)
-Total<-data.frame(MetSum,"Group"=as.factor(Output@Compromise.Coords$fit.cluster))
+Total<-data.frame(MetSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 p <- ggplot(Total, aes(x=Group, y=MetSum, fill=Group)) +
   geom_boxplot()+
   scale_fill_manual(values=c("Tomato", "Orange", "DodgerBlue"))+
@@ -594,7 +598,7 @@ p
 ```
 
 
-```{r, message=FALSE,warning=FALSE}
+```{r, message=FALSE,warning=FALSE,tidy=TRUE}
 ggplot(Total, aes(x=Group, y=rownames(Total), fill=MetSum)) +
   geom_tile() + scale_fill_gradient(low = "steelblue",
                                     high = "#FF0066",na.value="steelblue") +
@@ -608,7 +612,7 @@ ggplot(Total, aes(x=Group, y=rownames(Total), fill=MetSum)) +
 
 OTU2Taxa function can be used to aggregate OTUs into their taxonomic characteristics and to compute the most significant ("enrichment") genera/families to any OTUs' list, i.e., a list obtained by another methodology. For instance, in @Caldas the authors selected two OTUs list by applying SPLS and Discriminant SPLS (SPLS DA). Here, we show how to use these external dataset with OTU2Taxa: 
 
-```{r, message=FALSE,warning=FALSE,eval=FALSE}
+```{r, message=FALSE,warning=FALSE,eval=FALSE,tidy=TRUE}
 #library("readxl")
 #library("XLConnect")
 #library("openxlsx")
