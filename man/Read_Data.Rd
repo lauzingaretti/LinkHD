@@ -10,14 +10,18 @@ Read_Data(Path = "")
 \item{Path}{path to folder containing all dataset to integrate}
 }
 \value{
-\item{List}{List including all dataset into the parent directory. List names inherit the  names of the files}
+\item{List}{List including all dataset into the parent directory.
+List names inherit the  names of the files}
 }
 \description{
-this function read all dataset in a folder and returns list needed to Link_Data function input.
+this function read all dataset in a folder and returns
+list needed to Link_Data function input.
 }
 \examples{
+\dontrun{
+Datos<-Read_Data('Path to parent folder',common_elements=1)
+}
 
-###Datos<-Read_Data("Path to parent folder",common_elements=1)
 
 
 }

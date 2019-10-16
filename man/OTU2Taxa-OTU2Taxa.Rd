@@ -9,33 +9,44 @@ OTU2Taxa(Selection, TaxonInfo, tableName, AnalysisLev = "Genus")
 \arguments{
 \item{Selection}{list or data frame from VarSelection or dAB function}
 
-\item{TaxonInfo}{data.frame with taxonomic table associated to Data input. For instance, if Data comes from 16_S level, TaxoInfo should be a data.frame with 16_S associated taxonomic information.
+\item{TaxonInfo}{data.frame with taxonomic table associated to Data input.
+For instance, if Data comes from 16_S level, TaxoInfo should be a data.frame with 16_S
+associated taxonomic information.
 Note that the first column of this table must have the OTUs ids.}
 
-\item{tableName}{a character indicating the table name. For instance, if your data comes from 16_S, this parameter should be "16_S".
+\item{tableName}{a character indicating the table name. For instance, if your data comes
+from 16_S, this parameter should be '16_S'.
 Note that, this argument must mutch with the names from the input list into LinkData function.}
 
-\item{AnalysisLev}{It is a character indicating if data should be aggregate to genera or family level}
+\item{AnalysisLev}{It is a character indicating if data should be aggregate to genera
+or family level}
 }
 \value{
-List. The first element of this list contains all the selected taxa with their associated value from the hyperg distribution -log(p+0.05); the second element of this
-list have only taxas counting up to 1.
+List. The first element of this list contains all the selected taxa with
+their associated value from the hyperg distribution -log(p+0.05); the second element
+of this list have only taxas counting up to 1.
 }
 \description{
-This function aggregates OTUs into their taxonomic characteristics (genus or level)and it  analyses the most significant selected genera into each table.
-To each genera, the function returns the hypergeometric distribution function P(x>=X) to each count. The function also returns
-filtered data  by  counts higher than one. In both cases, we implemented -log(p+0.05), then a higher value means more significant, i.e., it is an enrichment genus or family.
+This function aggregates OTUs into their taxonomic characteristics
+(genus or level)and it  analyses the most significant selected genera into each table.
+To each genera, the function returns the hypergeometric distribution function P(x>=X)
+ to each count. The function also returns
+filtered data  by  counts higher than one. In both cases, we implemented -log(p+0.05),
+then a higher value means more significant, i.e., it is an enrichment genus or family.
 }
 \examples{
 {
-data("Ruminotypes")
-Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),function(x){DataProcessing(x,Method="Compositional")})
+data('Ruminotypes')
+Normalization<-lapply(list(Ruminotypes$`16_S`,Ruminotypes$Archaea,Ruminotypes$`18_S`),
+function(x){DataProcessing(x,Method='Compositional')})
 Dataset<-Normalization
-names(Dataset)<-c("16_S","Archaea","18_S")
+names(Dataset)<-c('16_S','Archaea','18_S')
 #Running LinkData
-Output<-LinkData(Dataset,Distance=rep("euclidean",3),Scale = FALSE,Center=FALSE,nCluster = 3)
-Select_Var<-VarSelection(Output,Data=Dataset,Crit = "Rsquare",perc=0.9)
-SignTaxa<-OTU2Taxa(Selection=Select_Var@VarTable,TaxonInfo=Ruminotypes$Taxa_16S,tableName="16_S",AnalysisLev = "Family")
+Output<-LinkData(Dataset,Distance=rep('euclidean',3),
+Scale = FALSE,Center=FALSE,nCluster = 3)
+Select_Var<-VarSelection(Output,Data=Dataset,Crit = 'Rsquare',perc=0.9)
+SignTaxa<-OTU2Taxa(Selection=VarTable(Select_Var),
+TaxonInfo=Ruminotypes$Taxa_16S,tableName='16_S',AnalysisLev = 'Family')
 Selected<-SignTaxa$TotalUp1
 }
 
@@ -44,8 +55,11 @@ Selected<-SignTaxa$TotalUp1
 {
 \enumerate{
 \item
-\item Da Wei Huang, B. T. S., & Lempicki, R. A. (2009). Bioinformatics enrichment tools: paths toward the comprehensive functional analysis of large gene lists. Nucleic acids research, 37(1), 1.
-\item Zheng, Q., & Wang, X. J. (2008). GOEAST: a web-based software toolkit for Gene Ontology enrichment analysis. Nucleic acids research, 36(suppl_2), W358-W363.
+\item Da Wei Huang, B. T. S., & Lempicki, R. A. (2009). Bioinformatics enrichment tools:
+paths toward the comprehensive functional analysis of large gene lists.
+Nucleic acids research, 37(1), 1.
+\item Zheng, Q., & Wang, X. J. (2008). GOEAST: a web-based software toolkit for
+Gene Ontology enrichment analysis. Nucleic acids research, 36(suppl_2), W358-W363.
 }
 }
 }
