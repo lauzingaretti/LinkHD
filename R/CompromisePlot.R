@@ -16,22 +16,25 @@
 #'
 #' @examples
 #' {
-#' \dontrun{
-#' #'data(Taraoceans)
-#'pro.phylo <- Taraoceans$taxonomy[ ,"Phylum"]
-#'TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),as.data.frame(Taraoceans$pro.NOGs))
+#'
+#'data(Taraoceans)
+#'pro.phylo <- Taraoceans$taxonomy[ ,'Phylum']
+#'TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),
+#'as.data.frame(Taraoceans$pro.NOGs))
 #'TaraOc_1<-scale(TaraOc[[1]])
-#'Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),function(x){DataProcessing(x,Method="Compositional")})
+#'Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),
+#'function(x){DataProcessing(x,Method='Compositional')})
 #'colnames(Normalization[[1]])=pro.phylo
 #'colnames(Normalization[[2]])=Taraoceans$GO
 #'TaraOc<-list(TaraOc_1,Normalization[[1]],Normalization[[2]])
-#'names(TaraOc)<-c("phychem","pro_phylo","pro_NOGs")
+#'names(TaraOc)<-c('phychem','pro_phylo','pro_NOGs')
 #'TaraOc<-lapply(TaraOc,as.data.frame)
-# Output<-LinkData(TaraOc,Scale =FALSE,Distance = c("ScalarProduct","Euclidean","Euclidean"))
-#'CompromisePlot(Output) +theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-#'                              panel.background = element_blank(), axis.line = element_line(colour = "black"))
+#'Output<-LinkData(TaraOc,Scale =FALSE,Distance = c('ScalarProduct','Euclidean','Euclidean'))
+#'CompromisePlot(Output) +
+#'theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#'panel.background = element_blank(), axis.line = element_line(colour = 'black'))
 #'
-#' }
+#'
 #' }
 #' @exportMethod CompromisePlot
 #' @docType methods
@@ -39,40 +42,43 @@
 #' Name=NULL, pchPoints=2, colObs=NULL,...)
 #' @name CompromisePlot
 #' @rdname DistStatis-CompromisePlot
+#' @inheritParams DistStatis
 #' @aliases CompromisePlot,DistStatis-method
 #' @import ggplot2
 #' @import graphics
 #'
-setGeneric("CompromisePlot",def=function(x,x_lab=NULL, y_lab=NULL,
-          Name=NULL, pchPoints=2,colObs=NULL,...){standardGeneric("CompromisePlot")})
 
 
 
-setMethod(f="CompromisePlot", signature="DistStatis", definition=function(x,x_lab=NULL, y_lab=NULL,
-         Name=NULL, pchPoints=2,colObs=NULL,...){
-  ##Check that is at element is available
-  if( !is(x,"DistStatis")){
-    stop("CompromisePlot requires a DistStatis object")
-  }
+setGeneric("CompromisePlot", def = function(x, x_lab = NULL, y_lab = NULL, Name = NULL, pchPoints = 2, colObs = NULL, 
+    ...) {
+    standardGeneric("CompromisePlot")
+})
 
-    PARACCIND<-x@Compromise.Coords
-    colnames(PARACCIND)<-paste0("Dim",seq(1:ncol(PARACCIND)))
-    if(is.null(x_lab)){
-    x_lab= paste0("Dim 1( ",round(x@Inertia.comp[1,2],2)," %)")
+
+
+setMethod(f = "CompromisePlot", c("DistStatis"), definition = function(x, x_lab = NULL, y_lab = NULL, Name = NULL, 
+    pchPoints = 2, colObs = NULL, ...) {
+    
+    
+    PARACCIND <- compromise_coords(x)
+    colnames(PARACCIND) <- paste0("Dim", seq_len(ncol(PARACCIND)))
+    if (is.null(x_lab)) {
+        x_lab = paste0("Dim 1( ", round(Inertia_comp(x)[1, 2], 2), " %)")
     }
-    if(is.null(y_lab)){
-      y_lab= paste0("Dim 2( ",round(x@Inertia.comp[2,2],2)," %)")
+    if (is.null(y_lab)) {
+        y_lab = paste0("Dim 2( ", round(Inertia_comp(x)[2, 2], 2), " %)")
     }
-
-    if(is.null(colObs)){
-      colObs<-x@RQO$`RQI(%)`
-      QR<-colObs
-    }else{
-     QR<-colObs
+    
+    if (is.null(colObs)) {
+        colObs <- RQO(x)$`RQI(%)`
+        QR <- colObs
+    } else {
+        QR <- colObs
     }
-
-    ggplot2::ggplot(PARACCIND, aes(x=Dim1, y=Dim2)) + geom_point(size=pchPoints,aes(color=QR)) +
-      labs(x = x_lab,y=y_lab) + ggtitle(Name)
-
-
+    
+    ggplot2::ggplot(PARACCIND, aes(x = PARACCIND[, 1], y = PARACCIND[, 2])) + geom_point(size = pchPoints, aes(color = QR)) + 
+        labs(x = x_lab, y = y_lab) + ggtitle(Name)
+    
+    
 })
