@@ -47,7 +47,7 @@ VarSelection is a class to perform variable selection from a DistStatis object.
 
 \examples{
 {
-showClass("VarSelection")
+showClass('VarSelection')
 }
 
 }

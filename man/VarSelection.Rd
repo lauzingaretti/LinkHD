@@ -16,9 +16,9 @@ data used to obtained the compromise configuration.It also can be a MultissayExp
 
 \item{intercept}{Logical. If is TRUE, the models with intercept are computed, else the intercept is zero.}
 
-\item{model}{character. "LM" for classical lm model. We've planned to implemening alternative models in the future.}
+\item{model}{character. 'LM' for classical lm model. We've planned to implemening alternative models in the future.}
 
-\item{Crit}{Character indicating the variable selection criteria.You could chose "Rsquare" or "p-val".}
+\item{Crit}{Character indicating the variable selection criteria.You could chose 'Rsquare' or 'p-val'.}
 
 \item{perc}{The value of percentil that indicate how much data than are selected.}
 
@@ -46,17 +46,20 @@ by each regression (adjusted r squared coefficient).
 \examples{
 {
 data(Taraoceans)
-pro.phylo <- Taraoceans$taxonomy[ ,"Phylum"]
-TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),as.data.frame(Taraoceans$pro.NOGs))
+pro.phylo <- Taraoceans$taxonomy[ ,'Phylum']
+TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),
+as.data.frame(Taraoceans$pro.NOGs))
 TaraOc_1<-scale(TaraOc[[1]])
-Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),function(x){DataProcessing(x,Method="Compositional")})
+Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),
+function(x){DataProcessing(x,Method='Compositional')})
 colnames(Normalization[[1]])=pro.phylo
 colnames(Normalization[[2]])=Taraoceans$GO
 TaraOc<-list(TaraOc_1,Normalization[[1]],Normalization[[2]])
-names(TaraOc)<-c("phychem","pro_phylo","pro_NOGs")
+names(TaraOc)<-c('phychem','pro_phylo','pro_NOGs')
 TaraOc<-lapply(TaraOc,as.data.frame)
-Output<-LinkData(TaraOc,Scale =FALSE,Distance = c('ScalarProduct','Euclidean','Euclidean'))
-Selection<-VarSelection(Output,TaraOc,Crit="Rsquare",perc=0.95)
+Output<-LinkData(TaraOc,Scale =FALSE,
+Distance = c('ScalarProduct','Euclidean','Euclidean'))
+Selection<-VarSelection(Output,TaraOc,Crit='Rsquare',perc=0.95)
 }
 }
 \references{

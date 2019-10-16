@@ -9,10 +9,10 @@ DataProcessing(Data = NULL, Method = "Standard")
 \arguments{
 \item{Data}{a numeric data.frame.}
 
-\item{Method}{character indicating the method used to Data preprocessing. If data are continous, use "Standard".
-If Data are compositional, please use "Compositional" and clr (centered log-ratios functions) transformations are performed.
-To compositional data, you also could use the option "TSS" Total Sum Scaling follow up bray (Bray-Curtis) in distance option.
-The function also allows to processing frequencies- like data through "FreqNorm" option.
+\item{Method}{character indicating the method used to Data preprocessing. If data are continous, use 'Standard'.
+If Data are compositional, please use 'Compositional' and clr (centered log-ratios functions) transformations are performed.
+To compositional data, you also could use the option 'TSS' Total Sum Scaling follow up bray (Bray-Curtis) in distance option.
+The function also allows to processing frequencies- like data through 'FreqNorm' option.
 Note that when you use Compositional, we first sum 1 to all the counts (in order to performs the log transformation before).}
 }
 \value{
@@ -27,7 +27,7 @@ frequencies.
 {
 data(Taraoceans)
 Data<-Taraoceans$phychem
-Data<-DataProcessing(Data,Method="Standard")
+Data<-DataProcessing(Data,Method='Standard')
 }
 }
 \author{

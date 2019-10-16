@@ -21,24 +21,28 @@ onto each subspace used at the integration step
 }
 \examples{
 {
-\dontrun{
-#'data(Taraoceans)
-pro.phylo <- Taraoceans$taxonomy[ ,"Phylum"]
-TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),as.data.frame(Taraoceans$pro.NOGs))
+
+data(Taraoceans)
+pro.phylo <- Taraoceans$taxonomy[ ,'Phylum']
+TaraOc<-list(Taraoceans$phychem,as.data.frame(Taraoceans$pro.phylo),
+as.data.frame(Taraoceans$pro.NOGs))
 TaraOc_1<-scale(TaraOc[[1]])
-Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),function(x){DataProcessing(x,Method="Compositional")})
+Normalization<-lapply(list(TaraOc[[2]],TaraOc[[3]]),
+function(x){DataProcessing(x,Method='Compositional')})
 colnames(Normalization[[1]])=pro.phylo
 colnames(Normalization[[2]])=Taraoceans$GO
 TaraOc<-list(TaraOc_1,Normalization[[1]],Normalization[[2]])
-names(TaraOc)<-c("phychem","pro_phylo","pro_NOGs")
+names(TaraOc)<-c('phychem','pro_phylo','pro_NOGs')
 TaraOc<-lapply(TaraOc,as.data.frame)
+Output<-LinkData(TaraOc,Scale =FALSE,
+Distance = c('ScalarProduct','Euclidean','Euclidean'))
 GlobalPlot(Output) +
 theme(panel.grid.major = element_blank(),
 panel.grid.minor = element_blank(),
 panel.background = element_blank(),
-axis.line = element_line(colour = "black"))
+axis.line = element_line(colour = 'black'))
 
-}
+
 }
 }
 \author{
