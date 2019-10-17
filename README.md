@@ -32,4 +32,4 @@ data(Rumynotipes)
 
 data(Tataoceans)
 
-More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD/
+More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD-examples/  
