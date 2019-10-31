@@ -19,9 +19,9 @@ The method also allows us to study the relashionships between observations and f
 ## Installation:
 
 Clone the repository or 
-
+```{r}
 devtools::install_github(repo="lauzingaretti/LinkHD")
-
+```
 or from Bioconductor
 
 ```{r}
