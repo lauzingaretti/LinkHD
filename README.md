@@ -22,6 +22,20 @@ Clone the repository or
 
 devtools::install_github(repo="lauzingaretti/LinkHD")
 
+or from Bioconductor
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+ #The following initializes usage of Bioc devel
+BiocManager::install(version='devel')
+
+BiocManager::install("LinkHD")
+```
+
+
+
 ## Usage
 
 library(linkHD)
