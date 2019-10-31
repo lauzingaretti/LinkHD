@@ -37,13 +37,15 @@ BiocManager::install("LinkHD")
 
 
 ## Usage
-
+```{r}
 library(linkHD)
+```
 
 LinkHD capabilities were demostrated analizing public datasets from TARA Ocean expedition (https://oceans.taraexpeditions.org/en/m/about-tara/les-expeditions/tara-oceans/) and datasets from rumen metataxonomic communities (including bactera, archaea and protozoa data). Data can be loaded by the next command: 
 
+```{r}
 data(Rumynotipes)
-
+#or
 data(Tataoceans)
-
+```
 More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD-examples/  
