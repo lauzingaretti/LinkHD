@@ -11,7 +11,7 @@ a versatile approach to integrate heterogeneous datasets
 
 If you find our package useful, please cite:
 
-Zingaretti,LM, Renand G, Morgavi DP, Ramayo-Caldas, Y (2019) LinkHD: a versatile framework to explore and integrate heterogeneous microbial comunnities. submitted. 
+Zingaretti, L. M., Renand, G., Morgavi, D. P., & Ramayo-Caldas, Y. (2019). Link-HD: a versatile framework to explore and integrate heterogeneous microbial communities. Bioinformatics.
 
 LinkHD is a general R software to integrate heterogeneous dataset focusing on micribial communities. LinkHD combines multivariate techniques to perform data integration with cluster and variable selection.
 The method also allows us to study the relashionships between observations and features and to obtain **enrichment taxa analysis**. 
