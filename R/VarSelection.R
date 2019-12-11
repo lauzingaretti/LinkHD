@@ -69,8 +69,10 @@
 
 
 
-VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsquare", perc = 0.9, nDims = 2, 
+VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsquare", perc = 0.9, nDims = 2,
     Normalize = FALSE) {
+   #fix the problem with categories Dec 11, 2019
+
     ## Obtain x name for future update
     nameObject <- deparse(substitute(x))
     if (!is(x, "DistStatis")) {
@@ -79,9 +81,9 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
     if (is(Data, "MultiassayExperiment")) {
         Data <- assays(Data)
     }
-    
+
     WWW <- Compromise_matrix(x)
-    
+
     ## Check parameters
     stopifnot(Crit[1] %in% c("Rsquare", "p-val"))
     if (is.null(perc) == TRUE) {
@@ -90,7 +92,7 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
     if (Crit != "Rsquare" & Crit != "p-val") {
         stop("Non-valid selection criteria")
     }
-    
+
     if (perc < 0 || perc > 1) {
         stop("Error in perc: Invalid percentil choice. Percentil have to be between 0 and 1")
     }
@@ -105,32 +107,32 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
     if (model != "LM") {
         stop("We only had been implemented the standard Linear Model")
     }
-    
+
     nDims <- round(nDims)
-    
+
     SvdComp <- svd(as.matrix(WWW))
-    
+
     AP <- as.matrix(WWW) %*% SvdComp$u %*% diag((1/sqrt(SvdComp$d)))
     # AP for plot
     ProjObs <- as.data.frame(AP[, seq_len(nDims)])
     rownames(ProjObs) <- rownames(WWW)
     colnames(ProjObs) <- paste("Dim", seq_len(nDims))
-    
-    
+
+
     Mat <- as.matrix(ProjObs)
     if (is(Data, "MultiAssayExperiment")) {
         Datos <- Data@ExperimentList@listData
     } else {
         Datos <- Data
     }
-    
-    
-    
-    if (all(apply((x <- vapply(Datos, rownames, character(nrow(Datos[[1]])))), 2, function(y) +identical(y, 
+
+
+
+    if (all(apply((x <- vapply(Datos, rownames, character(nrow(Datos[[1]])))), 2, function(y) +identical(y,
         rownames(Datos[[1]])))) == FALSE) {
         stop("tables should be the same observations")
     }
-    
+
     if (Normalize == TRUE) {
         Datos <- lapply(Datos, function(x) {
             scale(x, center = TRUE, scale = TRUE)
@@ -143,21 +145,21 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
             apply(m, 2, function(y) LinModel(Mat, y, intercept = intercept))
         })
     }
-    
+
     sn <- lapply(seq_along(s), function(i) {
         s[[i]][!vapply(s[[i]], is.null, logical(1))]
     })
     names(sn) <- names(Datos)
-    
-    
-    
+
+
+
     # dataset contains all models (coordinates and R2, pval to each table)
     dataset <- lapply(sn, function(x) {
         as.data.frame(matrix(unlist(x), nrow = 4, byrow = FALSE))
     })
-    
+
     # p val correction
-    
+
     # dataset<-lapply(dataset,function(x){x[2,]<-x[2,]/ncol(x)})
     for (i in seq_along(dataset)) {
         colnames(dataset[[i]]) <- names(s[[i]][!vapply(s[[i]], is.null, logical(1))])
@@ -169,57 +171,68 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
             all_dat <- cbind(all_dat, dataset[[i]])
         }
     }
-    
+
     nvar <- sum(unlist(lapply(Datos, ncol)))
     # number of variable to select
     Tosel <- floor(nvar - nvar * perc)
-    
-    
-    
+
+
+
     if (Crit == "Rsquare") {
         values <- unlist(lapply(dataset, function(x) {
             x[1, ]
         }))
+        Nam<-names(values)
+        values<-as.numeric(values)
+        names(values)<-Nam
         R2 <- sort(values, decreasing = TRUE)
         Seleccionados <- R2[seq_len(Tosel)]
         indices <- which(values %in% Seleccionados)
         # indices<-order(values,decreasing = TRUE)[seq_len(Tosel)]
+                if(any(Seleccionados<0)){
+          Seleccionados[Seleccionados<0]=0
+        }
     }
-    
+
     if (Crit == "p-val") {
         values <- p.adjust(unlist(lapply(dataset, function(x) {
             x[2, ]
         })), method = "fdr")
+        Nam<-names(values)
+        values<-as.numeric(values)
+        names(values)<-Nam
         # we could considerer add other methods
         pval <- sort(values)
         Seleccionados <- pval[seq_len(Tosel)]
         indices <- order(values)[seq_len(Tosel)]
+
+
     }
-    
+
     ### look for the variables into each table
     Nam <- names(Seleccionados)
     index <- lapply(c(seq_along(dataset)), function(i) {
         startsWith(Nam, names(dataset)[i])
     })
-    
-    
+
+
     variables <- c()
     for (i in seq_along(dataset)) {
         variables <- c(variables, unlist(lapply(Nam[index[[i]]], function(m) {
             strsplit(m, paste0(names(dataset)[i], "."))[[1]][2]
         })))
     }
-    
+
     if (Crit == "Rsquare") {
         Val <- all_dat[1, indices]
     }
     if (Crit == "p-val") {
         Val <- all_dat[2, indices]
     }
-    
-    .Object <- new("VarSelection", Variables = variables, Coordinates = all_dat[c(3:4), indices], VarTable = all_dat[5, 
+
+    .Object <- new("VarSelection", Variables = variables, Coordinates = all_dat[c(3:4), indices], VarTable = all_dat[5,
         indices], sign_values = Val)
     validObject(.Object)
     return(.Object)
-    
+
 }
