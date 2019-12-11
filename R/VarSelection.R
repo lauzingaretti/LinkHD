@@ -229,10 +229,17 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
 
     if (Crit == "Rsquare") {
         Val <- all_dat[1, indices]
+
     }
     if (Crit == "p-val") {
         Val <- all_dat[2, indices]
     }
+
+    if(any(Val<0)){
+        Val[Val<0]=0
+
+    }
+
 
     .Object <- new("VarSelection", Variables = variables, Coordinates = all_dat[c(3:4), indices], VarTable = all_dat[5,
         indices], sign_values = Val)
