@@ -189,8 +189,12 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
         Seleccionados <- R2[seq_len(Tosel)]
         indices <- which(values %in% Seleccionados)
         # indices<-order(values,decreasing = TRUE)[seq_len(Tosel)]
-                if(any(Seleccionados<0)){
+        if(any(Seleccionados<0)){
           Seleccionados[Seleccionados<0]=0
+        }
+        if(any(values<0)){
+            values[values<0]=0
+
         }
     }
 
