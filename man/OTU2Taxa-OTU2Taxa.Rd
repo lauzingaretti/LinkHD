@@ -11,28 +11,31 @@ OTU2Taxa(Selection, TaxonInfo, tableName, AnalysisLev = "Genus")
 
 \item{TaxonInfo}{data.frame with taxonomic table associated to Data input.
 For instance, if Data comes from 16_S level, TaxoInfo should be a data.frame with 16_S
-associated taxonomic information.
-Note that the first column of this table must have the OTUs ids.}
+associated taxonomic information. Note that the first column of this table must have the OTUs ids.}
 
 \item{tableName}{a character indicating the table name. For instance, if your data comes
-from 16_S, this parameter should be '16_S'.
-Note that, this argument must mutch with the names from the input list into LinkData function.}
+from 16_S, this parameter should be '16_S'. Importantly, this argument should match with the names from the input
+ list, ExpressionSet or MultiAssayExperiment
+ object, which corresponds the Data argument of LinkData function.}
 
-\item{AnalysisLev}{It is a character indicating if data should be aggregate to genera
+\item{AnalysisLev}{It is a character indicating if data should be aggregate into genera
 or family level}
 }
 \value{
-List. The first element of this list contains all the selected taxa with
-their associated value from the hyperg distribution -log(p+0.05); the second element
-of this list have only taxas counting up to 1.
+List. The function outputs a list of size two. The first element  contains all the selected taxa with
+their associated value from the hyperg distribution -log(p+0.05); whereas the second element
+only includes taxas' counting up to 1.
 }
 \description{
-This function aggregates OTUs into their taxonomic characteristics
-(genus or level)and it  analyses the most significant selected genera into each table.
-To each genera, the function returns the hypergeometric distribution function P(x>=X)
- to each count. The function also returns
-filtered data  by  counts higher than one. In both cases, we implemented -log(p+0.05),
-then a higher value means more significant, i.e., it is an enrichment genus or family.
+This function aggregates OTUs into their taxonomic characteristics,i.e.
+genera or family level and  returns a 'Taxonomic Enrichment Test' by using the hypergeometric distribution function P(x>=X), which gives the
+ probability of a particular
+genera/family has been selected by chance. This function  determines whether a selected set of genera/family  shows
+a statistically significant difference in comparison with the genera/family into the whole samples.
+This method is used to identify selected families or genus that are
+over-represented in a large set of OTUs. The output may have an important biological meaning since the selected genus/families
+ can be associated with
+phenotypes. The function outputs -log(p+0.05), i.e. a higher value means an 'enriched' genus or family.
 }
 \examples{
 {
