@@ -29,7 +29,7 @@ data used to obtained the compromise configuration.It also can be a MultissayExp
 \value{
 a \item{VarSelection}{VarSelection class with the
   corresponding completed slots
-  according to the given model}
+  according to the given model. Note that if a variable is chosen from several tables, it will appear as Var.1, Var.2, etc.}
 }
 \description{
 Function to do variable selection using a Regression Biplot methodology.
