@@ -22,7 +22,7 @@
 #'@param Normalize Logical. If is TRUE, the response variable in each model is normalized.
 #'@return a \item{VarSelection}{VarSelection class with the
 #'   corresponding completed slots
-#'   according to the given model}
+#'   according to the given model. Note that if a variable is chosen from several tables, it will appear as Var.1, Var.2, etc.}
 #'
 #'
 #'
@@ -181,8 +181,11 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
     if (Crit == "Rsquare") {
         values <- unlist(lapply(dataset, function(x) {
             x[1, ]
-        }))
-        Nam<-names(values)
+        }),use.names = FALSE)
+
+        Nam <- unlist(lapply(dataset, function(x) {
+          names(x[1, ])
+        }),use.names = FALSE)
         values<-as.numeric(values)
         names(values)<-Nam
         R2 <- sort(values, decreasing = TRUE)
@@ -202,7 +205,9 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
         values <- p.adjust(unlist(lapply(dataset, function(x) {
             x[2, ]
         })), method = "fdr")
-        Nam<-names(values)
+        Nam <- unlist(lapply(dataset, function(x) {
+          names(x[2, ])
+        }),use.names = FALSE)
         values<-as.numeric(values)
         names(values)<-Nam
         # we could considerer add other methods
@@ -215,17 +220,7 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
 
     ### look for the variables into each table
     Nam <- names(Seleccionados)
-    index <- lapply(c(seq_along(dataset)), function(i) {
-        startsWith(Nam, names(dataset)[i])
-    })
 
-
-    variables <- c()
-    for (i in seq_along(dataset)) {
-        variables <- c(variables, unlist(lapply(Nam[index[[i]]], function(m) {
-            strsplit(m, paste0(names(dataset)[i], "."))[[1]][2]
-        })))
-    }
 
     if (Crit == "Rsquare") {
         Val <- all_dat[1, indices]
@@ -241,7 +236,7 @@ VarSelection <- function(x, Data, intercept = FALSE, model = "LM", Crit = "Rsqua
     }
 
 
-    .Object <- new("VarSelection", Variables = variables, Coordinates = all_dat[c(3:4), indices], VarTable = all_dat[5,
+    .Object <- new("VarSelection", Variables = Nam, Coordinates = all_dat[c(3:4), indices], VarTable = all_dat[5,
         indices], sign_values = Val)
     validObject(.Object)
     return(.Object)
