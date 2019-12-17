@@ -15,7 +15,8 @@ Imports:
     MultiAssayExperiment,
     emmeans,
     reshape2,
-    data.table
+    data.table,
+    plyr
 Depends:
     R(>= 3.6.0),
     methods,
@@ -49,7 +50,8 @@ Description: Here we present Link-HD,
 License: GPL-3
 Encoding: UTF-8
 Collate: 'Read_Data.R' 'DataProcessing.R' 'DistStatis-Class.R' 'LinkData.R' 'CompromisePlot.R' 'VarSelection.R'
-    'GlobalPlot.R' 'CorrelationPlot.R' 'VarSelection-Class.R' 'Auxiliares.R' 'ComputeDistance.R' 'dAB.R' 'OTU2Taxa.R' 
+    'GlobalPlot.R' 'CorrelationPlot.R' 'VarSelection-Class.R' 'Auxiliares.R' 'ComputeDistance.R' 'dAB.R' 'OTU2Taxa.R' 'NA_inspect.R'
+    'impute_missing.R'
 LazyData: true
 NeedsCompilation: no
 Roxygen: list(wrap=FALSE)
