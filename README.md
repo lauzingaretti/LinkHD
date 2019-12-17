@@ -49,3 +49,19 @@ data(Rumynotipes)
 data(Tataoceans)
 ```
 More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD-examples/  
+
+
+## Novelty! (Christmas gift!)
+
+we have added a function to impute missing values in raw data. Note that this function should be used before any data transformation! 
+
+In fact, the process should be the following:
+
+
+```{r}
+#dir where data are stored 
+setwd('dir')
+Data<-ReadData()
+Out<-Na_inspect(Data)
+# if some of your data contains NA, you can use impute_missing() for each data.frame, otherwise you can follow with the standard analysis. 
+```
