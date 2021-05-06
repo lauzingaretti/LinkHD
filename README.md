@@ -51,7 +51,7 @@ data(Tataoceans)
 More examples and explanation of methods are available at:  https://lauzingaretti.github.io/LinkHD-examples/  
 
 
-## Missing data
+## Missing data imputation 
 
 we have added a function to impute missing values in raw data. Note that this function should be used before any data transformation!
 
