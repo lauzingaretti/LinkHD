@@ -56,7 +56,7 @@ setMethod(f = "GlobalPlot", c("DistStatis"), definition = function(x) {
 
 
     p<-lapply(Trajectories(x),function(m){ggplot2::ggplot(m[, seq_len(2)], aes(x = m[, 1], y =m[,
-                                                                                                2])) + geom_point(size = 2, aes(colour = "#000099")) + ggtitle(as.character(unique(Trajectories(x)[[i]]$Studies))) +
+                                                                                                2])) + geom_point(size = 2, aes(colour = "#000099")) + ggtitle(as.character(unique(m$Studies))) +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(),
               axis.line = element_line(colour = "black")) + theme(legend.position = "None") + labs(x = "Dim 1",
                                                                                                    y = "Dim 2") + scale_y_continuous(labels = scales::number_format(accuracy = 1e-04)) + scale_x_continuous(labels = scales::number_format(accuracy = 1e-04)) +
