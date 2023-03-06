@@ -92,6 +92,7 @@
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 #' @importMethodsFrom  MultiAssayExperiment assays
 
+
 LinkData <- function(Data, Distance = c(), Center = FALSE, Scale = FALSE, CorrelVector = TRUE, nCluster = 0,
     cl_method = "pam") {
 
