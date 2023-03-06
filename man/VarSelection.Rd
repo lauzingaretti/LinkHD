@@ -4,8 +4,16 @@
 \alias{VarSelection}
 \title{Variable Selection}
 \usage{
-VarSelection(x, Data, intercept = FALSE, model = "LM",
-  Crit = "Rsquare", perc = 0.9, nDims = 2, Normalize = FALSE)
+VarSelection(
+  x,
+  Data,
+  intercept = FALSE,
+  model = "LM",
+  Crit = "Rsquare",
+  perc = 0.9,
+  nDims = 2,
+  Normalize = FALSE
+)
 }
 \arguments{
 \item{x}{is an object of DistStatis Class.}

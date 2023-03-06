@@ -18,7 +18,7 @@ The values are sampled according to the distribution, i.e. the most frequent val
 }
 \examples{
 {
-# toy example. To simulate 13 missing columns with less than 50 \\\% of missing values in each.
+# toy example. To simulate 13 missing columns with less than 50 \\% of missing values in each.
 
 data('Ruminotypes')
 Data<-Ruminotypes$`16_S`

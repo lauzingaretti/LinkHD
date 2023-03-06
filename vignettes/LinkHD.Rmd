@@ -436,7 +436,7 @@ Christ_Tot<-Dataset[['16_S']][,colnames(Dataset[['16_S']])%in%OTUs]
 ChristSum<-apply(Christ_Tot,1,sum)
 Total<-data.frame(ChristSum,"Group"=as.factor(compromise_coords(Output)$fit.cluster))
 p <- ggplot(Total, aes(x=Group, y=ChristSum, fill=Group)) +
-  geom_boxplot()+
+  geom_boxplot() +
   scale_fill_manual(values=c("Tomato", "Orange", "DodgerBlue"))+
   theme_classic()+ ggtitle(paste("Differences at level",rownames(melted_Table)[14]))
 p

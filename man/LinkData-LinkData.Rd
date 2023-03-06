@@ -4,8 +4,15 @@
 \alias{LinkData}
 \title{LinkData: multiple heterogeneous dataset integration}
 \usage{
-LinkData(Data, Distance = c(), Center = FALSE, Scale = FALSE,
-  CorrelVector = TRUE, nCluster = 0, cl_method = "pam")
+LinkData(
+  Data,
+  Distance = c(),
+  Center = FALSE,
+  Scale = FALSE,
+  CorrelVector = TRUE,
+  nCluster = 0,
+  cl_method = "pam"
+)
 }
 \arguments{
 \item{Data}{should be a list of dataframes or ExpressionSet data
